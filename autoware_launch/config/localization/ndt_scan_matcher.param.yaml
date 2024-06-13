@@ -23,10 +23,10 @@
     step_size: 0.1
 
     # The ND voxel grid resolution
-    resolution: 2.0
+    resolution: 2.5
 
     # The number of iterations required to calculate alignment
-    max_iterations: 30
+    max_iterations: 50
 
     # Converged param type
     # 0=TRANSFORM_PROBABILITY, 1=NEAREST_VOXEL_TRANSFORMATION_LIKELIHOOD
@@ -58,7 +58,7 @@
     initial_pose_distance_tolerance_m: 10.0
 
     # Number of threads used for parallel computing
-    num_threads: 4
+    num_threads: 6
 
     # The covariance of output pose
     # Note that this covariance matrix is empirically derived
