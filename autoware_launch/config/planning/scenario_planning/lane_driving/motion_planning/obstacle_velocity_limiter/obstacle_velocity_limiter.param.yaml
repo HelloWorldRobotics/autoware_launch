@@ -20,7 +20,7 @@
       nb_points: 5  # number of points representing the curved projections
 
     obstacles:
-      dynamic_source: static_only # source of dynamic obstacles. Must be 'pointcloud', 'occupancy_grid', or 'static_only'.
+      dynamic_source: pointcloud # source of dynamic obstacles. Must be 'pointcloud', 'occupancy_grid', or 'static_only'.
       ignore_obstacles_on_path: false # if true, obstacles on the ego paths are ignored
       ignore_extra_distance: 1.0 # [m] extra lateral distance where obstacles along the path are ignored
       occupancy_grid_threshold: 60 # occupancy grid values higher than this are considered to be obstacles
