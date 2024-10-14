@@ -1,10 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <launch>
   <!-- Essential parameters -->
-  <arg name="map_path" description="point cloud and lanelet2 map directory path"/>
-  <arg name="vehicle_model" default="sample_vehicle" description="vehicle model name"/>
-  <arg name="sensor_model" default="sample_sensor_kit" description="sensor model name"/>
+  <arg name="vehicle_model" default="buggy_vehicle" description="vehicle model name"/>
+  <arg name="launch_vehicle" default="true" description="launch vehicle"/>
+  <arg name="sensor_model" default="buggy_sensor_kit" description="sensor model name"/>
   <arg name="pointcloud_container_name" default="pointcloud_container"/>
+  <arg name="launch_vehicle" default="true" description="launch vehicle"/>
+  <arg name="launch_system" default="true" description="launch system"/>
+  <arg name="launch_map" default="true" description="launch map"/>
+  <arg name="launch_sensing" default="true" description="launch sensing"/>
+  <arg name="launch_sensing_driver" default="true" description="launch sensing driver"/>
+  <arg name="launch_localization" default="true" description="launch localization"/>
+  <arg name="launch_perception" default="true" description="launch perception"/>
+  <arg name="launch_planning" default="true" description="launch planning"/>
+  <arg name="launch_control" default="true" description="launch control"/>
+  <arg name="launch_api" default="true" description="launch api"/>
 
   <!-- Vehicle -->
   <arg name="vehicle_id" default="$(env VEHICLE_ID default)" description="vehicle specific ID"/>
