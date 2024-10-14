@@ -37,5 +37,4 @@
   </include>
 
   <!-- Launch the traffic_reader.launch.py file -->
-  <include file="$(find-pkg-share autoware_launch)/launch/traffic_reader.launch.py"/>
-</launch>
+ </launch>
