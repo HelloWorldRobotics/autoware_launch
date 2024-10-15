@@ -175,4 +175,4 @@
 
       # debug
       debug:
-        print_debug_info: false
+        print_debug_info: true
