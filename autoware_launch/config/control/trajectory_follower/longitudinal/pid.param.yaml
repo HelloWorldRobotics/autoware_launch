@@ -5,7 +5,7 @@
     enable_smooth_stop: true
     enable_overshoot_emergency: true
     enable_large_tracking_error_emergency: true
-    enable_slope_compensation: true
+    enable_slope_compensation: false
     enable_keep_stopped_until_steer_convergence: false
 
     # state transition
@@ -20,8 +20,8 @@
     emergency_state_traj_rot_dev: 0.7854
 
     # drive state
-    kp: 1.0
-    ki: 0.1
+    kp: 0.5
+    ki: 0.001
     kd: 0.0
     max_out: 1.0
     min_out: -1.0
