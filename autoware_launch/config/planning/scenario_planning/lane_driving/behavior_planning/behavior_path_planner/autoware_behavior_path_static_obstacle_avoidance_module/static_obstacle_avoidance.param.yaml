@@ -71,7 +71,7 @@
             hard_margin: 0.2
             hard_margin_for_parked_vehicle: 0.2
           max_expand_ratio: 0.0
-          envelope_buffer_margin: 0.1
+          envelope_buffer_margin: 0.5
           th_error_eclipse_long_radius : 0.6
         bicycle:
           th_moving_speed: 0.28
