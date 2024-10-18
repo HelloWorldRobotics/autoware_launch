@@ -67,11 +67,11 @@
           th_moving_time: 1.0
           longitudinal_margin: 0.0
           lateral_margin:
-            soft_margin: 0.7
-            hard_margin: 0.2
-            hard_margin_for_parked_vehicle: 0.2
+            soft_margin: 0.5
+            hard_margin: 0.3
+            hard_margin_for_parked_vehicle: 0.3
           max_expand_ratio: 0.0
-          envelope_buffer_margin: 0.2
+          envelope_buffer_margin: 0.3
           th_error_eclipse_long_radius : 0.6
         bicycle:
           th_moving_speed: 0.28
@@ -220,8 +220,8 @@
         lateral:
           th_avoid_execution: 0.09                      # [m] FOR DEVELOPER
           th_small_shift_length: 0.101                  # [m] FOR DEVELOPER
-          soft_drivable_bound_margin: 0.3               # [m]
-          hard_drivable_bound_margin: 0.1               # [m]
+          soft_drivable_bound_margin: 0.5               # [m]
+          hard_drivable_bound_margin: 0.3               # [m]
           max_right_shift_length: 5.0                   # [m] FOR DEVELOPER
           max_left_shift_length: 5.0                    # [m] FOR DEVELOPER
           max_deviation_from_lane: 0.3                  # [m]
@@ -280,7 +280,7 @@
         #                margin to avoid.
         # "reliable": module output avoidance path with safe (rtc cooperate) state only when the vehicle can avoid
         #             with expected lateral margin.
-        lateral_margin: "best_effort"                   # [-]
+        lateral_margin: "reliable"                   # [-]
         # if true, module doesn't wait deceleration and outputs avoidance path by best effort margin.
         use_shorten_margin_immediately: true            # [-]
 
@@ -316,7 +316,7 @@
       #                      so that the path can be within drivable area. This method is able to deal with complex avoidance scenario.
       #                      However, user can't control avoidance manuever execution.
       # "both"             : Use both method.
-      path_generation_method: "shift_line_base"
+      path_generation_method: "optimization_base"
 
       shift_line_pipeline:
         trim:
