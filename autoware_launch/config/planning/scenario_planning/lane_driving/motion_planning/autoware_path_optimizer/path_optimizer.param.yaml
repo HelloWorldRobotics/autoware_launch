@@ -55,7 +55,7 @@
 
       clearance:  # clearance(distance) between vehicle and roads/objects when generating trajectory
         # if collision_free_constraints.option.hard_constraint is true
-        hard_clearance_from_road: 0.1 # clearance from road boundary[m]
+        hard_clearance_from_road: 0.0 # clearance from road boundary[m]
         # if collision_free_constraints.option.soft_constraint is true
         soft_clearance_from_road: 0.1 # clearance from road boundary[m]
 
