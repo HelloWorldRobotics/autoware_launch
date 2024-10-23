@@ -125,7 +125,7 @@
             check_bicycle: true
             check_motorcycle: true
             check_pedestrian: true
-            check_unknown: false
+            check_unknown: true
           # ObjectLaneConfiguration
           object_lane_configuration:
             check_current_lane: true
@@ -144,7 +144,7 @@
           # safety check configuration
           enable_safety_check: true
           # collision check parameters
-          publish_debug_marker: false
+          publish_debug_marker: true
           rss_params:
             rear_vehicle_reaction_time: 2.0
             rear_vehicle_safety_time_margin: 1.0
