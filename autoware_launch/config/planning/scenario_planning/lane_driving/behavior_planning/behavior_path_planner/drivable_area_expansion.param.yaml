@@ -3,7 +3,7 @@
     # Static expansion
     drivable_area_right_bound_offset: 0.0
     drivable_area_left_bound_offset: 0.0
-    drivable_area_types_to_skip: []
+    drivable_area_types_to_skip: [road_border]
 
     # Dynamic expansion by using the path curvature
     dynamic_expansion:
