@@ -23,7 +23,7 @@
           th_moving_time: 2.0                           # [s]
           longitudinal_margin: 0.0                      # [m]
           lateral_margin:
-            soft_margin: 0.3                            # [m]
+            soft_margin: 1.0                           # [m]
             hard_margin: 0.2                            # [m]
             hard_margin_for_parked_vehicle: 0.3         # [m]
           max_expand_ratio: 0.0                         # [-] FOR DEVELOPER
@@ -34,7 +34,7 @@
           th_moving_time: 2.0
           longitudinal_margin: 0.0
           lateral_margin:
-            soft_margin: 0.3
+            soft_margin: 1.0  
             hard_margin: 0.2
             hard_margin_for_parked_vehicle: 0.1
           max_expand_ratio: 0.0
@@ -45,7 +45,7 @@
           th_moving_time: 2.0
           longitudinal_margin: 0.0
           lateral_margin:
-            soft_margin: 0.3
+            soft_margin: 1.0  
             hard_margin: 0.2
             hard_margin_for_parked_vehicle: 0.1
           max_expand_ratio: 0.0
@@ -56,7 +56,7 @@
           th_moving_time: 2.0
           longitudinal_margin: 0.0
           lateral_margin:
-            soft_margin: 0.3
+            soft_margin: 1.0  
             hard_margin: 0.2
             hard_margin_for_parked_vehicle: 0.1
           max_expand_ratio: 0.0
@@ -67,7 +67,7 @@
           th_moving_time: 1.0
           longitudinal_margin: 0.0
           lateral_margin:
-            soft_margin: 0.2
+            soft_margin: 1.0  
             hard_margin: 0.0
             hard_margin_for_parked_vehicle: 0.0
           max_expand_ratio: 0.0
@@ -78,7 +78,7 @@
           th_moving_time: 1.0
           longitudinal_margin: 1.0
           lateral_margin:
-            soft_margin: 0.7
+            soft_margin: 1.0  
             hard_margin: 0.5
             hard_margin_for_parked_vehicle: 0.5
           max_expand_ratio: 0.0
