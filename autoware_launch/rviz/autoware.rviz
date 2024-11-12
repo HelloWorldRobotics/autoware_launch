@@ -906,7 +906,12 @@ Visualization Manager:
               Enabled: true
               Name: RouteArea
               Namespaces:
-                {}
+                end_lanelets: true
+                goal_lanelets: true
+                lane_start_bound: true
+                left_lane_bound: true
+                right_lane_bound: true
+                route_lanelets: true
               Topic:
                 Depth: 5
                 Durability Policy: Transient Local
@@ -1901,7 +1906,8 @@ Visualization Manager:
                           Enabled: true
                           Name: VirtualWall (StartPlanner)
                           Namespaces:
-                            {}
+                            stop_factor_text: true
+                            stop_virtual_wall: true
                           Topic:
                             Depth: 5
                             Durability Policy: Volatile
@@ -2057,7 +2063,10 @@ Visualization Manager:
                           Enabled: true
                           Name: VirtualWall (SpeedBump)
                           Namespaces:
-                            {}
+                            10491_slow_down_factor_text: true
+                            10491_slow_down_virtual_wall: true
+                            10492_slow_down_factor_text: true
+                            10492_slow_down_virtual_wall: true
                           Topic:
                             Depth: 5
                             Durability Policy: Volatile
@@ -2467,10 +2476,10 @@ Visualization Manager:
                         Alpha: 1
                         Color: 230; 230; 50
                         Offset from BaseLink: 0
-                        Rear Overhang: 1.0299999713897705
+                        Rear Overhang: 0.4000000059604645
                         Value: false
-                        Vehicle Length: 4.769999980926514
-                        Vehicle Width: 1.8300000429153442
+                        Vehicle Length: 3.9800000190734863
+                        Vehicle Width: 1.2130000591278076
                       View Path:
                         Alpha: 0.9990000128746033
                         Color: 0; 0; 0
@@ -4023,7 +4032,13 @@ Visualization Manager:
                 Color: 0; 230; 118
               Name: Tracking(green)
               Namespaces:
-                {}
+                acceleration: true
+                label: true
+                position covariance: true
+                shape: true
+                twist: true
+                uuid: true
+                velocity: true
               Object Fill Type: skeleton
               PEDESTRIAN:
                 Alpha: 0.9990000128746033
