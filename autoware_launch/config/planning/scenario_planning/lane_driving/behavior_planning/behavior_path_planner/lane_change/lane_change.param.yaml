@@ -2,12 +2,12 @@
   ros__parameters:
     lane_change:
       backward_lane_length: 200.0 #[m]
-      prepare_duration: 2.0         # [s]
+      prepare_duration: 4.0         # [s]
 
       backward_length_buffer_for_end_of_lane: 3.0 # [m]
       backward_length_buffer_for_blocking_object: 3.0 # [m]
 
-      lane_changing_lateral_jerk: 0.5              # [m/s3]
+      lane_changing_lateral_jerk: 0.8              # [m/s3]
 
       minimum_lane_changing_velocity: 2.78        # [m/s]
       prediction_time_resolution: 0.5           # [s]
@@ -57,8 +57,8 @@
           rear_vehicle_reaction_time: 1.5
           rear_vehicle_safety_time_margin: 0.8
           lateral_distance_max_threshold: 1.0
-          longitudinal_distance_min_threshold: 2.5
-          longitudinal_velocity_delta_time: 0.0
+          longitudinal_distance_min_threshold: 2.0
+          longitudinal_velocity_delta_time: 0.1
         stuck:
           expected_front_deceleration: -1.0
           expected_rear_deceleration: -1.0
