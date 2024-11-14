@@ -17,7 +17,7 @@
         pedestrian: true
 
         max_obstacle_vel: 100.0 # [m/s]
-        min_obstacle_vel: 0.0 # [m/s]
+        min_obstacle_vel: 1.0 # [m/s]
 
         successive_num_to_entry_dynamic_avoidance_condition: 5
         successive_num_to_exit_dynamic_avoidance_condition: 1
