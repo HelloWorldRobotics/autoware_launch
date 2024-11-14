@@ -117,7 +117,7 @@
         enable_on_lane_changing_phase: true
         delta_time: 1.0                     # [s]
         duration: 5.0                       # [s]
-        max_lateral_jerk: 2000.0             # [m/s3]
+        max_lateral_jerk: 3000.0             # [m/s3]
         overhang_tolerance: 1.0             # [m]
         unsafe_hysteresis_threshold: 5      # [/]
         deceleration_sampling_num: 3 # [/]
