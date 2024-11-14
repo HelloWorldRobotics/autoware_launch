@@ -41,7 +41,7 @@
 
   <!-- Base Driver -->
   <group if="$(var launch_base_driver)">
-    <include file="$(find-pkg-share buggy_base_driver)/launch/buggy_odom.launch.py"/>
+    <include file="$(find-pkg-share emerge_base_driver)/launch/emerge_base_driver.launch.py"/>
   </group>
 
   <!-- Autoware Interface -->
