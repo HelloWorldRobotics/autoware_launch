@@ -28,7 +28,7 @@
             hard_margin_for_parked_vehicle: 0.3         # [m]
           max_expand_ratio: 0.0                         # [-] FOR DEVELOPER
           envelope_buffer_margin: 0.3                   # [m] FOR DEVELOPER
-          th_error_eclipse_long_radius : 0.3            # [m]
+          th_error_eclipse_long_radius : 0.6            # [m]
         truck:
           th_moving_speed: 1.0
           th_moving_time: 2.0
