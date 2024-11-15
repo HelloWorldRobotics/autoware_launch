@@ -29,7 +29,7 @@ launch:
       default: "true"
   - arg:
       name: launch_start_planner_module
-      default: "true"
+      default: "false"
   - arg:
       name: launch_side_shift_module
       default: "true"

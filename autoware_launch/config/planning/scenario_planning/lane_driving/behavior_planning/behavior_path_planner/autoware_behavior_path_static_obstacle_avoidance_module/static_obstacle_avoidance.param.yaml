@@ -23,7 +23,7 @@
           th_moving_time: 2.0                           # [s]
           longitudinal_margin: 0.0                      # [m]
           lateral_margin:
-            soft_margin: 0.5                           # [m]
+            soft_margin: 0.7                          # [m]
             hard_margin: 0.2                            # [m]
             hard_margin_for_parked_vehicle: 0.3         # [m]
           max_expand_ratio: 0.0                         # [-] FOR DEVELOPER
@@ -122,7 +122,7 @@
           motorcycle: true                              # [-]
           pedestrian: true                              # [-]
         # detection range
-        object_check_goal_distance: 20.0                # [m]
+        object_check_goal_distance: 5.0                # [m]
         object_check_return_pose_distance: 20.0         # [m]
         # lost object compensation
         max_compensation_time: 2.0
