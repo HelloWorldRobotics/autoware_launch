@@ -7,7 +7,7 @@
       backward_length_buffer_for_end_of_lane: 3.0 # [m]
       backward_length_buffer_for_blocking_object: 3.0 # [m]
 
-      lane_changing_lateral_jerk: 1.0             # [m/s3]
+      lane_changing_lateral_jerk: 0.5             # [m/s3]
 
       minimum_lane_changing_velocity: 2.78        # [m/s]
       prediction_time_resolution: 0.5           # [s]
@@ -28,8 +28,8 @@
 
       skip_process:
         longitudinal_distance_diff_threshold:
-          prepare: 1.0
-          lane_changing: 1.0
+          prepare: 0.5
+          lane_changing: 0.5
 
       # safety check
       safety_check:
@@ -41,8 +41,8 @@
           rear_vehicle_reaction_time: 2.0
           rear_vehicle_safety_time_margin: 1.0
           lateral_distance_max_threshold: 2.0
-          longitudinal_distance_min_threshold: 10.0
-          longitudinal_velocity_delta_time: 1.0
+          longitudinal_distance_min_threshold: 5.0
+          longitudinal_velocity_delta_time: 0.0
         parked:
           expected_front_deceleration: -1.0
           expected_rear_deceleration: -2.0
@@ -93,12 +93,12 @@
       # collision check
       enable_collision_check_for_prepare_phase:
         general_lanes: true
-        intersection: false
+        intersection: true
         turns: true
       stopped_object_velocity_threshold: 1.0 # [m/s]
-      check_objects_on_current_lanes: false
+      check_objects_on_current_lanes: true
       check_objects_on_other_lanes: true
-      use_all_predicted_path: true
+      use_all_predicted_path: false
 
       # lane change regulations
       regulation:
@@ -118,7 +118,7 @@
         delta_time: 1.0                     # [s]
         duration: 5.0                       # [s]
         max_lateral_jerk: 3000.0             # [m/s3]
-        overhang_tolerance: 1.0             # [m]
+        overhang_tolerance: 0.0             # [m]
         unsafe_hysteresis_threshold: 5      # [/]
         deceleration_sampling_num: 3 # [/]
 
