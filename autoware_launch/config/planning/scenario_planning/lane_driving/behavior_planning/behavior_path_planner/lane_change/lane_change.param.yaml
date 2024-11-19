@@ -37,9 +37,9 @@
         collision_check_yaw_diff_threshold: 3.1416
         execution:
           expected_front_deceleration: -1.0
-          expected_rear_deceleration: -1.0
-          rear_vehicle_reaction_time: 2.0
-          rear_vehicle_safety_time_margin: 1.0
+          expected_rear_deceleration: -0.5  
+          rear_vehicle_reaction_time: 5.0
+          rear_vehicle_safety_time_margin: 2.0
           lateral_distance_max_threshold: 2.0
           longitudinal_distance_min_threshold: 5.0
           longitudinal_velocity_delta_time: 0.0
@@ -98,7 +98,7 @@
       stopped_object_velocity_threshold: 1.0 # [m/s]
       check_objects_on_current_lanes: true
       check_objects_on_other_lanes: true
-      use_all_predicted_path: false
+      use_all_predicted_path: true
 
       # lane change regulations
       regulation:
