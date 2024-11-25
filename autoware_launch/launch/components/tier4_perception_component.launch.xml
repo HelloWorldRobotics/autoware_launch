@@ -29,6 +29,8 @@
     <arg name="occupancy_grid_map_method" value="$(var occupancy_grid_map_method)_occupancy_grid_map"/>
     <arg name="occupancy_grid_map_updater" value="$(var occupancy_grid_map_updater)"/>
 
+    <arg name="image_number" value="1"/>
+
     <arg name="use_empty_dynamic_object_publisher" value="$(var use_empty_dynamic_object_publisher)"/>
     <arg name="use_low_height_cropbox" value="$(var use_low_height_cropbox)"/>
     <arg name="use_vector_map" value="$(var use_vector_map)"/>
