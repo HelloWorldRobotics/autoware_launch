@@ -125,7 +125,7 @@
         object_check_goal_distance: 5.0                # [m]
         object_check_return_pose_distance: 20.0         # [m]
         # lost object compensation
-        max_compensation_time: 2.0
+        max_compensation_time: 4.0
 
         # detection area generation parameters
         detection_area:
@@ -250,7 +250,7 @@
 
       # For cancel maneuver
       cancel:
-        enable: true                                    # [-]
+        enable: false                                    # [-]
         force:
           duration_time: 2.0                            # [s]
 
