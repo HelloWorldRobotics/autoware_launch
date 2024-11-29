@@ -316,7 +316,7 @@
       #                      so that the path can be within drivable area. This method is able to deal with complex avoidance scenario.
       #                      However, user can't control avoidance manuever execution.
       # "both"             : Use both method.
-      path_generation_method: "optimization_base"
+      path_generation_method: "both"
 
       shift_line_pipeline:
         trim:
