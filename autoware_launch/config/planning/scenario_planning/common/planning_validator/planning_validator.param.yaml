@@ -4,7 +4,7 @@
     #  0: publish the trajectory even if it is invalid
     #  1: stop publishing the trajectory
     #  2: publish the last validated trajectory
-    invalid_trajectory_handling_type: 0
+    invalid_trajectory_handling_type: 2
 
     publish_diag: true  # if true, diagnostic msg is published
 
@@ -36,4 +36,4 @@
       # An error is raised if the required trajectory length is less than this distance.
       # Setting it to 0 means an error will occur if even slightly exceeding the end of the path,
       # therefore, a certain margin is necessary.
-      forward_trajectory_length_margin: 2.0
+      forward_trajectory_length_margin: 3.0
