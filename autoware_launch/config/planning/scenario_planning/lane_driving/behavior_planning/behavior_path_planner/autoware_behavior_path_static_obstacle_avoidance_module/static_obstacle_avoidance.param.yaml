@@ -23,7 +23,7 @@
           th_moving_time: 2.0                           # [s]
           longitudinal_margin: 0.0                      # [m]
           lateral_margin:
-            soft_margin: 0.7                          # [m]
+            soft_margin: 0.5                          # [m]
             hard_margin: 0.2                            # [m]
             hard_margin_for_parked_vehicle: 0.3         # [m]
           max_expand_ratio: 0.0                         # [-] FOR DEVELOPER
