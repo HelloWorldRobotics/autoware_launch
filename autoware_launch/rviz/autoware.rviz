@@ -8,7 +8,6 @@ Panels:
         - /System1/Vehicle1
         - /Map1
         - /Map1/Lanelet2VectorMap1
-        - /Map1/Lanelet2VectorMap1/Status1
         - /Map1/Lanelet2VectorMap1/Topic1
         - /Map1/Lanelet2VectorMap1/Namespaces1
         - /Sensing1/LiDAR1/ConcatenatePointCloud1/Autocompute Value Bounds1
@@ -25,13 +24,15 @@ Panels:
         - /Planning1/Diagnostic1/PlanningErrorMarker1
         - /Debug1/Planning1
       Splitter Ratio: 0.4964539110660553
-    Tree Height: 728
+    Tree Height: 490
   - Class: rviz_common/Selection
     Name: Selection
   - Class: rviz_common/Tool Properties
     Expanded:
       - /Bird Eye View1
       - /Third Person View1
+      - /2D Dummy Car1
+      - /Delete All Objects1
     Name: Tool Properties
     Splitter Ratio: 0.5886790156364441
   - Class: rviz_common/Views
@@ -75,8 +76,6 @@ Visualization Manager:
               Value: false
             map:
               Value: false
-            ndt_base_link:
-              Value: false
             sensor_kit_base_link:
               Value: false
             traffic_light_left_camera/camera_link:
@@ -108,38 +107,6 @@ Visualization Manager:
           Show Names: true
           Tree:
             map:
-              base_link:
-                sensor_kit_base_link:
-                  camera0/camera_link:
-                    camera0/camera_optical_link:
-                      {}
-                  camera1/camera_link:
-                    camera1/camera_optical_link:
-                      {}
-                  camera2/camera_link:
-                    camera2/camera_optical_link:
-                      {}
-                  gnss_link:
-                    {}
-                  imu_link:
-                    {}
-                  traffic_light_left_camera/camera_link:
-                    traffic_light_left_camera/camera_optical_link:
-                      {}
-                  traffic_light_right_camera/camera_link:
-                    traffic_light_right_camera/camera_optical_link:
-                      {}
-                  velodyne_left_base_link:
-                    velodyne_left:
-                      {}
-                  velodyne_right_base_link:
-                    velodyne_right:
-                      {}
-                  velodyne_top_base_link:
-                    velodyne_top:
-                      {}
-              ndt_base_link:
-                {}
               viewer:
                 {}
           Update Interval: 0
@@ -657,12 +624,7 @@ Visualization Manager:
               Enabled: true
               Name: MonteCarloInitialPose
               Namespaces:
-                initial_pose_index_color_marker: true
-                initial_pose_iteration_color_marker: true
-                initial_pose_transform_probability_color_marker: true
-                result_pose_index_color_marker: true
-                result_pose_iteration_color_marker: true
-                result_pose_transform_probability_color_marker: true
+                {}
               Topic:
                 Depth: 5
                 Durability Policy: Volatile
@@ -887,15 +849,7 @@ Visualization Manager:
                     Color: 119; 11; 32
                   Name: PredictedObjects
                   Namespaces:
-                    acceleration: true
-                    label: true
-                    path: true
-                    path confidence: true
-                    position covariance: true
-                    shape: true
-                    twist: true
-                    uuid: true
-                    velocity: true
+                    {}
                   Object Fill Type: skeleton
                   PEDESTRIAN:
                     Alpha: 0.9990000128746033
@@ -2631,8 +2585,7 @@ Visualization Manager:
                           Enabled: true
                           Name: VirtualWall (ObstacleCruise)
                           Namespaces:
-                            stop_factor_text: true
-                            stop_virtual_wall: true
+                            {}
                           Topic:
                             Depth: 5
                             Durability Policy: Volatile
@@ -2668,8 +2621,7 @@ Visualization Manager:
                           Enabled: true
                           Name: VirtualWall (ObstacleVelocityLimiter)
                           Namespaces:
-                            slow_down_factor_text: true
-                            slow_down_virtual_wall: true
+                            {}
                           Topic:
                             Depth: 5
                             Durability Policy: Volatile
@@ -3061,8 +3013,7 @@ Visualization Manager:
           Enabled: true
           Name: Info/AEB
           Namespaces:
-            stop_factor_text: true
-            stop_virtual_wall: true
+            {}
           Topic:
             Depth: 5
             Durability Policy: Volatile
@@ -4416,13 +4367,31 @@ Visualization Manager:
       Fly Mode: false
       Left Hand Mode: false
       Step Length: 0.10000000149011612
+    - Acceleration: 0
+      Class: rviz_plugins/CarInitialPoseTool
+      H vehicle height: 2
+      Interactive: false
+      L vehicle length: 4
+      Max velocity: 33.29999923706055
+      Min velocity: -33.29999923706055
+      Pose Topic: /simulation/dummy_perception_publisher/object_info
+      Target Frame: <Fixed Frame>
+      Theta std deviation: 0.0872664600610733
+      Velocity: 6
+      W vehicle width: 1.7999999523162842
+      X std deviation: 0.029999999329447746
+      Y std deviation: 0.029999999329447746
+      Z position: 0
+      Z std deviation: 0.029999999329447746
+    - Class: rviz_plugins/DeleteAllObjectsTool
+      Pose Topic: /simulation/dummy_perception_publisher/object_info
   Transformation:
     Current:
       Class: rviz_default_plugins/TF
   Value: true
   Views:
     Current:
-      Angle: -0.004999999888241291
+      Angle: 0.4249999225139618
       Class: tier4_camera_view_rviz_plugin/BirdEyeView
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
@@ -4432,11 +4401,11 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Scale: 11.350780487060547
+      Scale: 13.154952049255371
       Target Frame: base_link
       Value: BirdEyeView (tier4_camera_view_rviz_plugin)
-      X: -9.143120765686035
-      Y: 21.787260055541992
+      X: -17.605945587158203
+      Y: -19.160594940185547
     Saved:
       - Class: rviz_default_plugins/ThirdPersonFollower
         Distance: 18
@@ -4481,21 +4450,21 @@ Window Geometry:
   AutowareStatePanel:
     collapsed: false
   Displays:
-    collapsed: true
-  Height: 1376
+    collapsed: false
+  Height: 1043
   Hide Left Dock: false
-  Hide Right Dock: true
+  Hide Right Dock: false
   PointcloudOnCamera:
     collapsed: false
-  QMainWindow State: 000000ff00000000fd00000004000000000000019d00000506fc020000000efb0000001200530065006c0065006300740069006f006e00000001e10000009b0000005c00fffffffb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb0000000c00430061006d0065007200610100000682000000eb0000000000000000fb0000000a0049006d0061006700650100000505000002680000000000000000fb0000002c0049006e0069007400690061006c0050006f007300650042007500740074006f006e00500061006e0065006c000000068f000000de0000000000000000fb0000002c0049006e0069007400690061006c0050006f007300650042007500740074006f006e00500061006e0065006c000000068f000000de0000000000000000fb00000030005200650063006f0067006e006900740069006f006e0052006500730075006c0074004f006e0049006d00610067006500000000bb000001b30000002800fffffffb0000002a004100750074006f0077006100720065004400610074006500540069006d006500500061006e0065006c0000000332000000720000004100fffffffb000000240050006f0069006e00740063006c006f00750064004f006e00430061006d006500720061000000039d000000560000002800fffffffb00000034004100750074006f0077006100720065004100750074006f006d00610074006900630047006f0061006c00500061006e0065006c000000012c000002a30000006e00ffffff00000001000001a9000003dcfc0200000004fb000000100044006900730070006c006100790073000000016700000315000000c900fffffffc00000482000000c10000000000fffffffaffffffff0100000002fb0000000a0056006900650077007300000005d5000001ab0000010000fffffffb0000001e0054006f006f006c002000500072006f00700065007200740069006500730000000000ffffffff0000009d00fffffffb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000001200530065006c0065006300740069006f006e010000025a000000b20000000000000000000000020000038400000124fc0100000002fb00000024004100750074006f00770061007200650053007400610074006500500061006e0065006c010000000000000384000000c100fffffffb0000000a00560069006500770073030000004e00000080000002e1000001970000000300000e7a0000005afc0100000002fb0000000800540069006d0065010000000000000e7a0000000000000000fb0000000800540069006d0065010000000000000450000000000000000000000384000003dc00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd00000004000000000000019d00000506fc020000000efb0000001200530065006c0065006300740069006f006e00000001e10000009b0000005c00fffffffb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb0000000c00430061006d0065007200610100000682000000eb0000000000000000fb0000000a0049006d0061006700650100000505000002680000000000000000fb0000002c0049006e0069007400690061006c0050006f007300650042007500740074006f006e00500061006e0065006c000000068f000000de0000000000000000fb0000002c0049006e0069007400690061006c0050006f007300650042007500740074006f006e00500061006e0065006c000000068f000000de0000000000000000fb00000030005200650063006f0067006e006900740069006f006e0052006500730075006c0074004f006e0049006d00610067006500000000bb000001b30000002800fffffffb0000002a004100750074006f0077006100720065004400610074006500540069006d006500500061006e0065006c0000000332000000720000004100fffffffb000000240050006f0069006e00740063006c006f00750064004f006e00430061006d006500720061000000039d000000560000002800fffffffb00000034004100750074006f0077006100720065004100750074006f006d00610074006900630047006f0061006c00500061006e0065006c000000012c000002a30000015300ffffff00000001000001a900000324fc0200000004fb000000100044006900730070006c00610079007301000000d200000227000000c900fffffffc000002ff000000f7000000c10100001cfa000000010100000002fb0000000a0056006900650077007301000005d5000001ab0000010000fffffffb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000000ffffffff0000009d00fffffffb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000001200530065006c0065006300740069006f006e010000025a000000b2000000000000000000000002000007800000008ffc0100000002fb00000024004100750074006f00770061007200650053007400610074006500500061006e0065006c010000000000000780000000c100fffffffb0000000a00560069006500770073030000004e00000080000002e1000001970000000300000e7a0000005afc0100000002fb0000000800540069006d0065010000000000000e7a0000000000000000fb0000000800540069006d00650100000000000004500000000000000000000005d10000032400000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   RecognitionResultOnImage:
     collapsed: false
   Selection:
     collapsed: false
   Tool Properties:
-    collapsed: true
+    collapsed: false
   Views:
-    collapsed: true
-  Width: 900
-  X: 0
-  Y: 27
+    collapsed: false
+  Width: 1920
+  X: 1920
+  Y: 0
