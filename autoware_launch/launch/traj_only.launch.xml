@@ -1,0 +1,54 @@
+<launch>
+  <!-- Arguments -->
+  <arg name="use_intra_process" default="false" description="use ROS 2 component container communication"/>
+  <arg name="use_multithread" default="true" description="use multithread"/>
+  
+  <!-- Parameter paths -->
+  <arg name="trajectory_follower_node_param_path" default="/home/zawl/buggy_ws/src/launch/autoware_launch/autoware_launch/config/control/trajectory_follower/trajectory_follower_node.param.yaml"/>
+  <arg name="lon_controller_param_path" default="/home/zawl/buggy_ws/src/launch/autoware_launch/autoware_launch/config/control/trajectory_follower/longitudinal/pid.param.yaml"/>
+  <arg name="lat_controller_param_path" default="/home/zawl/buggy_ws/src/launch/autoware_launch/autoware_launch/config/control/trajectory_follower/lateral/mpc.param.yaml"/>
+  <arg name="vehicle_param_file" default="/home/zawl/buggy_ws/src/launch/buggy_vehicle_launch/buggy_vehicle_description/config/vehicle_info.param.yaml"/>
+  <arg name="nearest_search_param_path" default="$(find-pkg-share autoware_launch)/config/control/common/nearest_search.param.yaml"/>
+
+  <let name="container_executable" value="component_container" unless="$(var use_multithread)"/>
+  <let name="container_executable" value="component_container_mt" if="$(var use_multithread)"/>
+
+  <group>
+    <push-ros-namespace namespace="control"/>
+
+    <!-- Container -->
+    <node_container pkg="rclcpp_components" 
+                   exec="$(var container_executable)" 
+                   name="control_container" 
+                   namespace="">
+      <composable_node pkg="autoware_trajectory_follower_node" 
+                       plugin="autoware::motion::control::trajectory_follower_node::Controller" 
+                       name="controller_node_exe" 
+                       namespace="trajectory_follower">
+        <!-- Remappings -->
+        <remap from="~/input/reference_trajectory" to="/planning/scenario_planning/trajectory"/>
+        <remap from="~/input/current_odometry" to="/localization/kinematic_state"/>
+        <remap from="~/input/current_steering" to="/vehicle/status/steering_status"/>
+        <remap from="~/input/current_accel" to="/localization/acceleration"/>
+        <remap from="~/input/current_operation_mode" to="/system/operation_mode/state"/>
+        <remap from="~/output/predicted_trajectory" to="lateral/predicted_trajectory"/>
+        <remap from="~/output/lateral_diagnostic" to="lateral/diagnostic"/>
+        <remap from="~/output/slope_angle" to="longitudinal/slope_angle"/>
+        <remap from="~/output/longitudinal_diagnostic" to="longitudinal/diagnostic"/>
+        <remap from="~/output/stop_reason" to="longitudinal/stop_reason"/>
+        <remap from="~/output/control_cmd" to="control_cmd"/>
+
+        <!-- Parameters -->
+        <param name="lateral_controller_mode" value="mpc"/>
+        <param name="longitudinal_controller_mode" value="pid"/>
+        <param from="$(var trajectory_follower_node_param_path)"/>
+        <param from="$(var lon_controller_param_path)"/>
+        <param from="$(var lat_controller_param_path)"/>
+        <param from="$(var vehicle_param_file)"/>
+        <param from="$(var nearest_search_param_path)"/>
+        
+        <extra_arg name="use_intra_process_comms" value="$(var use_intra_process)"/>
+      </composable_node>
+    </node_container>
+  </group>
+</launch>
