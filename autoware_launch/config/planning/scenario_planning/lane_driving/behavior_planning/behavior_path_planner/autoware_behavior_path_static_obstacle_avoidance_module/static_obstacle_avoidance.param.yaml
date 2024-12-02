@@ -250,7 +250,7 @@
 
       # For cancel maneuver
       cancel:
-        enable: false                                    # [-]
+        enable: true                                    # [-]
         force:
           duration_time: 2.0                            # [s]
 
