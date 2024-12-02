@@ -23,7 +23,7 @@
           th_moving_time: 2.0                           # [s]
           longitudinal_margin: 0.0                      # [m]
           lateral_margin:
-            soft_margin: 0.5                          # [m]
+            soft_margin: 0.4                          # [m]
             hard_margin: 0.2                            # [m]
             hard_margin_for_parked_vehicle: 0.3         # [m]
           max_expand_ratio: 0.0                         # [-] FOR DEVELOPER
@@ -125,7 +125,7 @@
         object_check_goal_distance: 5.0                # [m]
         object_check_return_pose_distance: 20.0         # [m]
         # lost object compensation
-        max_compensation_time: 4.0
+        max_compensation_time: 2.0
 
         # detection area generation parameters
         detection_area:
@@ -220,11 +220,11 @@
         lateral:
           th_avoid_execution: 0.09                      # [m] FOR DEVELOPER
           th_small_shift_length: 0.101                  # [m] FOR DEVELOPER
-          soft_drivable_bound_margin: 0.5               # [m]
+          soft_drivable_bound_margin: 0.4               # [m]
           hard_drivable_bound_margin: 0.3               # [m]
           max_right_shift_length: 5.0                   # [m] FOR DEVELOPER
           max_left_shift_length: 5.0                    # [m] FOR DEVELOPER
-          max_deviation_from_lane: 0.3                  # [m]
+          max_deviation_from_lane: 0.2                  # [m]
           # approve the next shift line after reaching this percentage of the current shift line length.
           # this parameter is added to allow waiting for the return of shift approval until the occlusion behind the avoid target is clear.
           # this feature can be disabled by setting this parameter to 0.0.

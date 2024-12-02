@@ -45,7 +45,7 @@
         front_object:
           max_object_angle: 0.785
           min_object_vel: -0.5               # [m/s] The value is negative considering the noisy velocity of the stopped vehicle.
-          max_ego_path_lat_cover_ratio: 0.2  # [-] The object will be ignored if the ratio of the object covering the ego's path is higher than this value.
+          max_ego_path_lat_cover_ratio: 0.3  # [-] The object will be ignored if the ratio of the object covering the ego's path is higher than this value.
 
         stopped_object:
           max_object_vel: 1.0 # [m/s] The object will be determined as stopped if the velocity is smaller than this value.
@@ -72,8 +72,8 @@
         overtaking_object:
           max_time_to_collision: 40.0 # [s]
           start_duration_to_avoid: 1.0  # [s]
-          end_duration_to_avoid: 8.0  # [s]
-          duration_to_hold_avoidance: 4.0 # [s]
+          end_duration_to_avoid: 1.0  # [s]
+          duration_to_hold_avoidance: 3.0 # [s]
 
         # for opposite directional object
         oncoming_object:
