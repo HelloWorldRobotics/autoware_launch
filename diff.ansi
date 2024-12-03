@@ -1,0 +1,1082 @@
+diff --git a/autoware_launch/config/control/operation_mode_transition_manager/operation_mode_transition_manager.param.yaml b/autoware_launch/config/control/operation_mode_transition_manager/operation_mode_transition_manager.param.yaml
+index a4e8ab2..aff60d6 100644
+--- a/autoware_launch/config/control/operation_mode_transition_manager/operation_mode_transition_manager.param.yaml
++++ b/autoware_launch/config/control/operation_mode_transition_manager/operation_mode_transition_manager.param.yaml
+@@ -4,17 +4,17 @@
+     frequency_hz: 10.0
+ 
+     # set true if you want to engage the autonomous driving mode while the vehicle is driving. If set to false, it will deny Engage in any situation where the vehicle speed is not zero. Note that if you use this feature without adjusting the parameters, it may cause issues like sudden deceleration. Before using, please ensure the engage condition and the vehicle_cmd_gate transition filter are appropriately adjusted.
+-    enable_engage_on_driving: false
++    enable_engage_on_driving: true #TO GET DESIRED BEHAVIOR: TO BE ABLE TO SWITCH TO AUTO DRIVE WHEN MOVING [NOT TESTED PROPERLY]
+
+ 
+-    check_engage_condition: false # set false if you do not want to care about the engage condition.
++    check_engage_condition: true # set false if you do not want to care about the engage condition.
+     nearest_dist_deviation_threshold: 3.0 # [m] for finding nearest index
+     nearest_yaw_deviation_threshold: 1.57 # [rad] for finding nearest index
+     engage_acceptable_limits:
+       allow_autonomous_in_stopped: true  # no check if the velocity is zero, always allowed.
+       dist_threshold: 1.5
+       yaw_threshold: 0.524
+-      speed_upper_threshold: 10.0
+-      speed_lower_threshold: -10.0
++      speed_upper_threshold: 2.0 #TO GET DESIRED BEHAVIOR: TO BE ABLE TO SWITCH TO AUTO DRIVE WHEN MOVING [NOT TESTED PROPERLY]
++      speed_lower_threshold: -2.0 #TO GET DESIRED BEHAVIOR: TO BE ABLE TO SWITCH TO AUTO DRIVE WHEN MOVING [NOT TESTED PROPERLY]
+       acc_threshold: 1.5
+       lateral_acc_threshold: 1.0
+       lateral_acc_diff_threshold: 0.5
+diff --git a/autoware_launch/config/control/trajectory_follower/longitudinal/pid.param.yaml b/autoware_launch/config/control/trajectory_follower/longitudinal/pid.param.yaml
+index 5c5d65a..a76b4d2 100644
+--- a/autoware_launch/config/control/trajectory_follower/longitudinal/pid.param.yaml
++++ b/autoware_launch/config/control/trajectory_follower/longitudinal/pid.param.yaml
+@@ -1,17 +1,17 @@
+ /**:
+   ros__parameters:
+-    delay_compensation_time: 0.1
++    delay_compensation_time: 0.25 #TO GET DESIRED BEHAVIOR: COMPENSATE DELAY IN BUGGY CONTROL
+ 
+     enable_smooth_stop: true
+-    enable_overshoot_emergency: true
++    enable_overshoot_emergency: false #TO GET DESIRED BEHAVIOR: DISABLE UNNECESSARY EMERGENCY FLAGS
+     enable_large_tracking_error_emergency: true
+-    enable_slope_compensation: true
+-    enable_keep_stopped_until_steer_convergence: true
++    enable_slope_compensation: false #TO GET DESIRED BEHAVIOR: UNRELIABLE SLOPE SOURCES CURRENTLY DUE TO LANELET/PCD [FUTURE: TEST WITH IMU SLOPE]
++    enable_keep_stopped_until_steer_convergence: false #TO GET DESIRED BEHAVIOR: TO SWITCH TO AUTO FASTER
+ 
+     # state transition
+-    drive_state_stop_dist: 0.5
++    drive_state_stop_dist: 2.0 #TO GET DESIRED BEHAVIOR: INCREASED SINCE NO BRAKE IMPLEMENTED YET
+     drive_state_offset_stop_dist: 1.0
+-    stopping_state_stop_dist: 0.5
++    stopping_state_stop_dist: 2.0 #TO GET DESIRED BEHAVIOR: INCREASED SINCE NO BRAKE IMPLEMENTED YET
+     stopped_state_entry_duration_time: 0.1
+     stopped_state_entry_vel: 0.01
+     stopped_state_entry_acc: 0.1
+@@ -20,29 +20,29 @@
+     emergency_state_traj_rot_dev: 0.7854
+ 
+     # drive state
+-    kp: 1.0
+-    ki: 0.1
+-    kd: 0.0
+-    max_out: 1.0
++    kp: 0.2 #TO GET DESIRED BEHAVIOR: TESTED APPROPRIATE VALUES
++    ki: 0.001 #TO GET DESIRED BEHAVIOR: TESTED APPROPRIATE VALUES
++    kd: 0.2 #TO GET DESIRED BEHAVIOR: TESTED APPROPRIATE VALUES
++    max_out: 0.2 #TO GET DESIRED BEHAVIOR: TESTED APPROPRIATE VALUES
+     min_out: -1.0
+-    max_p_effort: 1.0
+-    min_p_effort: -1.0
+-    max_i_effort: 0.3
+-    min_i_effort: -0.3
+-    max_d_effort: 0.0
+-    min_d_effort: 0.0
++    max_p_effort: 0.2 #TO GET DESIRED BEHAVIOR: TESTED APPROPRIATE VALUES
++    min_p_effort: -0.2 #TO GET DESIRED BEHAVIOR: TESTED APPROPRIATE VALUES
++    max_i_effort: 0.05 #TO GET DESIRED BEHAVIOR: TESTED APPROPRIATE VALUES
++    min_i_effort: -0.05 #TO GET DESIRED BEHAVIOR: TESTED APPROPRIATE VALUES
++    max_d_effort: 0.2 #TO GET DESIRED BEHAVIOR: TESTED APPROPRIATE VALUES
++    min_d_effort: -0.2 #TO GET DESIRED BEHAVIOR: TESTED APPROPRIATE VALUES
+     lpf_vel_error_gain: 0.9
+     enable_integration_at_low_speed: false
+-    current_vel_threshold_pid_integration: 0.5
++    current_vel_threshold_pid_integration: 2.0 #TO GET DESIRED BEHAVIOR: INCREASED SINCE NO BRAKE IMPLEMENTED YET
+     time_threshold_before_pid_integration: 2.0
+     enable_brake_keeping_before_stop: false
+     brake_keeping_acc: -0.2
+ 
+     # smooth stop state
+-    smooth_stop_max_strong_acc: -0.5
+-    smooth_stop_min_strong_acc: -0.8
+-    smooth_stop_weak_acc: -0.3
+-    smooth_stop_weak_stop_acc: -0.8
++    smooth_stop_max_strong_acc: -2.5 #TO GET DESIRED BEHAVIOR: INCREASED SINCE NO BRAKE IMPLEMENTED YET
++    smooth_stop_min_strong_acc: -2.0 #TO GET DESIRED BEHAVIOR: INCREASED SINCE NO BRAKE IMPLEMENTED YET
++    smooth_stop_weak_acc: -2.0 #TO GET DESIRED BEHAVIOR: INCREASED SINCE NO BRAKE IMPLEMENTED YET
++    smooth_stop_weak_stop_acc: -2.0 #TO GET DESIRED BEHAVIOR: INCREASED SINCE NO BRAKE IMPLEMENTED YET
+     smooth_stop_strong_stop_acc: -3.4
+     smooth_stop_max_fast_vel: 0.5
+     smooth_stop_min_running_vel: 0.01
+@@ -65,7 +65,7 @@
+     acc_feedback_gain: 0.0
+ 
+     # acceleration limit
+-    max_acc: 3.0
++    max_acc: 0.5 #TO GET DESIRED BEHAVIOR: STOP IN TIME, NO BRAKES, THIS IS THE MAX ACCEL WE CAN EXPECT
+     min_acc: -5.0
+ 
+     # jerk limit
+diff --git a/autoware_launch/config/localization/ekf_localizer.param.yaml b/autoware_launch/config/localization/ekf_localizer.param.yaml
+index 1331952..250f976 100644
+--- a/autoware_launch/config/localization/ekf_localizer.param.yaml
++++ b/autoware_launch/config/localization/ekf_localizer.param.yaml
+@@ -12,7 +12,7 @@
+       # for Pose measurement
+       pose_additional_delay: 0.0
+       pose_measure_uncertainty_time: 0.01
+-      pose_smoothing_steps: 5
++      pose_smoothing_steps: 3 #PARAMS FROM BEFORE
+       pose_gate_dist: 49.5 # corresponds to significance level = 10^-10
+ 
+     twist_measurement:
+diff --git a/autoware_launch/config/localization/ndt_scan_matcher/ndt_scan_matcher.param.yaml b/autoware_launch/config/localization/ndt_scan_matcher/ndt_scan_matcher.param.yaml
+index 5d6b8d7..a321943 100644
+--- a/autoware_launch/config/localization/ndt_scan_matcher/ndt_scan_matcher.param.yaml
++++ b/autoware_launch/config/localization/ndt_scan_matcher/ndt_scan_matcher.param.yaml
+@@ -29,13 +29,13 @@
+       step_size: 0.1
+ 
+       # The ND voxel grid resolution
+-      resolution: 2.0
++      resolution: 2.5 #PARAMS FROM BEFORE
+ 
+       # The number of iterations required to calculate alignment
+-      max_iterations: 30
++      max_iterations: 100 ##CHANGED #PARAMS FROM BEFORE
+ 
+       # Number of threads used for parallel computing
+-      num_threads: 4
++      num_threads: 6 #PARAMS FROM BEFORE
+ 
+       regularization:
+         enable: false
+@@ -51,7 +51,7 @@
+       # The number of initial random trials in the TPE (Tree-Structured Parzen Estimator).
+       # This value should be equal to or less than 'initial_estimate_particles_num' and more than 0.
+       # If it is equal to 'initial_estimate_particles_num', the search will be the same as a full random search.
+-      n_startup_trials: 100
++      n_startup_trials: 150 ##CHANGED #PARAMS FROM BEFORE
+ 
+ 
+     validation:
+diff --git a/autoware_launch/config/perception/object_recognition/prediction/map_based_prediction.param.yaml b/autoware_launch/config/perception/object_recognition/prediction/map_based_prediction.param.yaml
+index 9034ff6..416a84a 100644
+--- a/autoware_launch/config/perception/object_recognition/prediction/map_based_prediction.param.yaml
++++ b/autoware_launch/config/perception/object_recognition/prediction/map_based_prediction.param.yaml
+@@ -4,7 +4,7 @@
+     prediction_time_horizon:
+       vehicle: 15.0 #[s]
+       pedestrian: 10.0 #[s]
+-      unknown: 10.0 #[s]
++      unknown: 1.0 #[s] #TO GET DESIRED BEHAVIOR: INCREASE UNKNOWN PATH PREDICTION ACCURACY
+     lateral_control_time_horizon: 5.0 #[s]
+     prediction_sampling_delta_time: 0.5 #[s]
+     min_velocity_for_map_based_prediction: 1.0 #[m/s]
+diff --git a/autoware_launch/config/perception/obstacle_segmentation/ground_segmentation/ground_segmentation.param.yaml b/autoware_launch/config/perception/obstacle_segmentation/ground_segmentation/ground_segmentation.param.yaml
+index 3f33218..d2fc5b6 100644
+--- a/autoware_launch/config/perception/obstacle_segmentation/ground_segmentation/ground_segmentation.param.yaml
++++ b/autoware_launch/config/perception/obstacle_segmentation/ground_segmentation/ground_segmentation.param.yaml
+@@ -7,28 +7,28 @@
+ 
+     common_crop_box_filter:
+       parameters:
+-        min_x: -100.0
++        min_x: -200.0 #PARAMS FROM BEFORE
+         max_x: 150.0
+         min_y: -70.0
+         max_y: 70.0
+         margin_max_z: 0.0  # to extend the crop box max_z from vehicle_height
+-        margin_min_z: -2.5 # to extend the crop box min_z from ground
++        margin_min_z: -3.5 # to extend the crop box min_z from ground # TO BE CHANGED 
+         negative: False
+ 
+     common_ground_filter:
+       plugin: "ground_segmentation::ScanGroundFilterComponent"
+       parameters:
+         global_slope_max_angle_deg: 10.0
+-        local_slope_max_angle_deg: 13.0 # recommended 30.0 for non elevation_grid_mode
+-        split_points_distance_tolerance: 0.2
+-        use_virtual_ground_point: True
+-        split_height_distance: 0.2
+-        non_ground_height_threshold: 0.20
+-        grid_size_m: 0.1
++        local_slope_max_angle_deg: 25.0 # recommended 30.0 for non elevation_grid_mode #TO GET DESIRED BEHAVIOR: BETTER GROUND SEGMENTATION, TESTED 
++        split_points_distance_tolerance: 0.3 #TO GET DESIRED BEHAVIOR: BETTER GROUND SEGMENTATION, TESTED 
++        use_virtual_ground_point: true #TO GET DESIRED BEHAVIOR: BETTER GROUND SEGMENTATION, TESTED 
++        split_height_distance: 0.05 #TO GET DESIRED BEHAVIOR: BETTER GROUND SEGMENTATION, TESTED 
++        non_ground_height_threshold: 0.15 #TO GET DESIRED BEHAVIOR: BETTER GROUND SEGMENTATION, TESTED 
++        grid_size_m: 0.2
+         grid_mode_switch_radius: 20.0
+         gnd_grid_buffer_size: 4
+-        detection_range_z_max: 2.5
+-        elevation_grid_mode: true
++        detection_range_z_max: 1.0 #TO GET DESIRED BEHAVIOR: BETTER GROUND SEGMENTATION, TESTED 
++        elevation_grid_mode: false #TO GET DESIRED BEHAVIOR: BETTER GROUND SEGMENTATION, TESTED 
+         use_recheck_ground_cluster: true
+         use_lowest_point: true
+         low_priority_region_x: -20.0
+diff --git a/autoware_launch/config/planning/preset/default_preset.yaml b/autoware_launch/config/planning/preset/default_preset.yaml
+index 5a3139e..c4f677d 100644
+--- a/autoware_launch/config/planning/preset/default_preset.yaml
++++ b/autoware_launch/config/planning/preset/default_preset.yaml
+@@ -8,7 +8,7 @@ launch:
+       default: "true"
+   - arg:
+       name: launch_dynamic_obstacle_avoidance
+-      default: "false"
++      default: "true" #TO GET DESIRED BEHAVIOR: ACTIVATE DISABLED DETECTION MODULE
+   - arg:
+       name: launch_sampling_planner_module
+       default: "false" # Warning, experimental module, use only in simulations
+@@ -29,7 +29,7 @@ launch:
+       default: "true"
+   - arg:
+       name: launch_start_planner_module
+-      default: "true"
++      default: "false" #DISABLED SINCE START PLANNER BEHAVES ERRATICALLY AT TIMES
+   - arg:
+       name: launch_side_shift_module
+       default: "true"
+@@ -70,10 +70,10 @@ launch:
+       default: "false"
+   - arg:
+       name: launch_run_out_module
+-      default: "true"
++      default: "false" #FROM BEFORE
+   - arg:
+       name: launch_speed_bump_module
+-      default: "false"
++      default: "true" #TO GET DESIRED BEHAVIOR: SLOW DOWN FOR SPEEDBUMP
+   - arg:
+       name: launch_no_drivable_lane_module
+       default: "false"
+diff --git a/autoware_launch/config/planning/scenario_planning/common/autoware_velocity_smoother/velocity_smoother.param.yaml b/autoware_launch/config/planning/scenario_planning/common/autoware_velocity_smoother/velocity_smoother.param.yaml
+index ff97ae8..b9e25f2 100644
+--- a/autoware_launch/config/planning/scenario_planning/common/autoware_velocity_smoother/velocity_smoother.param.yaml
++++ b/autoware_launch/config/planning/scenario_planning/common/autoware_velocity_smoother/velocity_smoother.param.yaml
+@@ -11,27 +11,27 @@
+     curvature_calculation_distance: 2.0         # distance of points while curvature is calculating for the steer rate and lateral acceleration limit [m]
+     # lateral acceleration limit parameters
+     enable_lateral_acc_limit: true     # To toggle the lateral acc filter on and off. You can switch it dynamically at runtime.
+-    max_lateral_accel: 1.0             # max lateral acceleration limit [m/ss]
+-    min_curve_velocity: 2.0            # min velocity at lateral acceleration limit and steering angle rate limit [m/s]
+-    decel_distance_before_curve: 3.5   # slow speed distance before a curve for lateral acceleration limit
++    max_lateral_accel: 0.65           # max lateral acceleration limit [m/ss] #TO GET DESIRED BEHAVIOR: APPROPRIATE CORNERING SPEEDS TESTED
++    min_curve_velocity: 0.8            # min velocity at lateral acceleration limit and steering angle rate limit [m/s] #TO GET DESIRED BEHAVIOR: APPROPRIATE CORNERING SPEEDS TESTED
++    decel_distance_before_curve: 5.5   # slow speed distance before a curve for lateral acceleration limit #TO GET DESIRED BEHAVIOR: APPROPRIATE CORNERING SPEEDS TESTED
+     decel_distance_after_curve: 2.0    # slow speed distance after a curve for lateral acceleration limit
+     min_decel_for_lateral_acc_lim_filter: -2.5  # deceleration limit applied in the lateral acceleration filter to avoid sudden braking [m/ss]
+     # steering angle rate limit parameters
+-    enable_steering_rate_limit: true         # To toggle the steer rate filter on and off. You can switch it dynamically at runtime.
++    enable_steering_rate_limit: false        # To toggle the steer rate filter on and off. You can switch it dynamically at runtime. #FROM BEFORE
+     max_steering_angle_rate: 11.5            # maximum steering angle rate [degree/s]
+     resample_ds: 0.1                         # distance between trajectory points [m]
+     curvature_threshold: 0.02                # if curvature > curvature_threshold, steeringRateLimit is triggered [1/m]
+ 
+     # engage & replan parameters
+     replan_vel_deviation: 5.53         # velocity deviation to replan initial velocity [m/s]
+-    engage_velocity: 0.25              # engage velocity threshold [m/s] (if the trajectory velocity is higher than this value, use this velocity for engage vehicle speed)
++    engage_velocity: 0.5              # engage velocity threshold [m/s] (if the trajectory velocity is higher than this value, use this velocity for engage vehicle speed) #TO GET DESIRED BEHAVIOR: APPROPRIATE ENGAGE VELOCITY TO START
+     engage_acceleration: 0.5           # engage acceleration [m/ss] (use this acceleration when engagement)
+     engage_exit_ratio: 0.5             # exit engage sequence to normal velocity planning when the velocity exceeds engage_exit_ratio x engage_velocity.
+     stop_dist_to_prohibit_engage: 0.5  # if the stop point is in this distance, the speed is set to 0 not to move the vehicle [m]
+ 
+     # stop velocity
+-    stopping_velocity: 2.778  # change target velocity to this value before v=0 point [m/s]
+-    stopping_distance: 0.0    # distance for the stopping_velocity [m]. 0 means the stopping velocity is not applied.
++    stopping_velocity: 0.5  # change target velocity to this value before v=0 point [m/s] #TO GET DESIRED BEHAVIOR: SLOW DOWN FOR STOPPING
++    stopping_distance: 2.0    # distance for the stopping_velocity [m]. 0 means the stopping velocity is not applied. #TO GET DESIRED BEHAVIOR: SLOW DOWN EARLIER FOR STOPPING
+ 
+     # path extraction parameters
+     extract_ahead_dist: 200.0         # forward trajectory distance used for planning [m]
+diff --git a/autoware_launch/config/planning/scenario_planning/common/common.param.yaml b/autoware_launch/config/planning/scenario_planning/common/common.param.yaml
+index 4edbbf2..53a2981 100644
+--- a/autoware_launch/config/planning/scenario_planning/common/common.param.yaml
++++ b/autoware_launch/config/planning/scenario_planning/common/common.param.yaml
+@@ -4,14 +4,14 @@
+ 
+     # constraints param for normal driving
+     normal:
+-      min_acc: -1.0         # min deceleration [m/ss]
+-      max_acc: 1.0          # max acceleration [m/ss]
+-      min_jerk: -1.0        # min jerk [m/sss]
+-      max_jerk: 1.0         # max jerk [m/sss]
++      min_acc: -0.4         # min deceleration [m/ss] #TO GET DESIRED BEHAVIOR: NO BRAKE DECELERATION
++      max_acc: 2.0          # max acceleration [m/ss] #TO BE CHANGED TO 1.0
++      min_jerk: -0.25        # min jerk [m/sss] #TO GET DESIRED BEHAVIOR: NO BRAKE JERK DECELERATION
++      max_jerk: 2.0         # max jerk [m/sss] #TO BE CHANGED TO 1.0
+ 
+     # constraints to be observed
+     limit:
+-      min_acc: -2.5         # min deceleration limit [m/ss]
+-      max_acc: 1.0          # max acceleration limit [m/ss]
+-      min_jerk: -1.5        # min jerk limit [m/sss]
+-      max_jerk: 1.5         # max jerk limit [m/sss]
++      min_acc: -0.5         # min deceleration limit [m/ss] #TO GET DESIRED BEHAVIOR: NO BRAKE DECELERATION
++      max_acc: 2.0          # max acceleration limit [m/ss] #TO BE CHANGED TO 1.0
++      min_jerk: -0.25        # min jerk limit [m/sss] #TO GET DESIRED BEHAVIOR: NO BRAKE JERK DECELERATION
++      max_jerk: 2.5         # max jerk limit [m/sss] #TO BE CHANGED TO 1.0
+diff --git a/autoware_launch/config/planning/scenario_planning/common/planning_validator/planning_validator.param.yaml b/autoware_launch/config/planning/scenario_planning/common/planning_validator/planning_validator.param.yaml
+index da337d7..fd1e0a5 100644
+--- a/autoware_launch/config/planning/scenario_planning/common/planning_validator/planning_validator.param.yaml
++++ b/autoware_launch/config/planning/scenario_planning/common/planning_validator/planning_validator.param.yaml
+@@ -4,7 +4,7 @@
+     #  0: publish the trajectory even if it is invalid
+     #  1: stop publishing the trajectory
+     #  2: publish the last validated trajectory
+-    invalid_trajectory_handling_type: 0
++    invalid_trajectory_handling_type: 2 #TO GET DESIRED BEHAVIOR: ATTEMPT TO CONTINUE ON INVALID TRAJECTORY [NOT TESTED]
+ 
+     publish_diag: true  # if true, diagnostic msg is published
+ 
+@@ -36,4 +36,4 @@
+       # An error is raised if the required trajectory length is less than this distance.
+       # Setting it to 0 means an error will occur if even slightly exceeding the end of the path,
+       # therefore, a certain margin is necessary.
+-      forward_trajectory_length_margin: 2.0
++      forward_trajectory_length_margin: 3.0 #TO GET DESIRED BEHAVIOR: LONGER TRAJECTORY TO AVOID STOPPING
+diff --git a/autoware_launch/config/planning/scenario_planning/lane_driving/behavior_planning/behavior_path_planner/autoware_behavior_path_dynamic_obstacle_avoidance_module/dynamic_obstacle_avoidance.param.yaml b/autoware_launch/config/planning/scenario_planning/lane_driving/behavior_planning/behavior_path_planner/autoware_behavior_path_dynamic_obstacle_avoidance_module/dynamic_obstacle_avoidance.param.yaml
+index 32d0caf..cfb9e00 100644
+--- a/autoware_launch/config/planning/scenario_planning/lane_driving/behavior_planning/behavior_path_planner/autoware_behavior_path_dynamic_obstacle_avoidance_module/dynamic_obstacle_avoidance.param.yaml
++++ b/autoware_launch/config/planning/scenario_planning/lane_driving/behavior_planning/behavior_path_planner/autoware_behavior_path_dynamic_obstacle_avoidance_module/dynamic_obstacle_avoidance.param.yaml
+@@ -2,7 +2,7 @@
+   ros__parameters:
+     dynamic_avoidance:
+       common:
+-        enable_debug_info: false
++        enable_debug_info: true
+         use_hatched_road_markings: true
+ 
+       # avoidance is performed for the object type with true
+@@ -17,11 +17,11 @@
+         pedestrian: true
+ 
+         max_obstacle_vel: 100.0 # [m/s]
+-        min_obstacle_vel: 0.0 # [m/s]
++        min_obstacle_vel: 1.0 # [m/s] #TO GET DESIRED BEHAVIOR: DONT CONSIDER STOPPED OBJECTS
+ 
+         successive_num_to_entry_dynamic_avoidance_condition: 5
+         successive_num_to_exit_dynamic_avoidance_condition: 1
+-
++        
+         min_obj_lat_offset_to_ego_path: 0.0 # [m]
+         max_obj_lat_offset_to_ego_path: 1.0 # [m]
+ 
+@@ -45,18 +45,18 @@
+         front_object:
+           max_object_angle: 0.785
+           min_object_vel: -0.5               # [m/s] The value is negative considering the noisy velocity of the stopped vehicle.
+-          max_ego_path_lat_cover_ratio: 0.3  # [-] The object will be ignored if the ratio of the object covering the ego's path is higher than this value.
++          max_ego_path_lat_cover_ratio: 0.2  # [-] The object will be ignored if the ratio of the object covering the ego's path is higher than this value. #REVERTED BACK TO DEFAULT 0.3
+ 
+         stopped_object:
+-          max_object_vel: 0.5 # [m/s] The object will be determined as stopped if the velocity is smaller than this value.
++          max_object_vel: 1.0 # [m/s] The object will be determined as stopped if the velocity is smaller than this value. #HANDLED BY STATIC 
+ 
+       drivable_area_generation:
+         polygon_generation_method: "ego_path_base" # choose "ego_path_base" and "object_path_base"
+         object_path_base:
+           min_longitudinal_polygon_margin: 3.0 # [m]
+ 
+-        lat_offset_from_obstacle: 1.0 # [m]
+-        margin_distance_around_pedestrian: 2.0 # [m]
++        lat_offset_from_obstacle: 0.3 # [m] #TO GET DESIRED BEHAVIOR: CARS ARE CRAZY HERE SO IF ITS NOT SMALL WE WILL BE AVOIDING ALL THE TIME
++        margin_distance_around_pedestrian: 0.6 # [m] #TO GET DESIRED BEHAVIOR: CHANGED WHEN TUNING BEFORE GPU INSTALL WITH ALL UNKNOWN OBJECT PARAMS
+         predicted_path:
+           end_time_to_consider: 2.0 # [s]
+           threshold_confidence: 0.0 # [] not probability
+@@ -72,8 +72,8 @@
+         overtaking_object:
+           max_time_to_collision: 40.0 # [s]
+           start_duration_to_avoid: 1.0  # [s]
+-          end_duration_to_avoid: 1.0  # [s]
+-          duration_to_hold_avoidance: 3.0 # [s]
++          end_duration_to_avoid: 8.0  # [s] #REVERT BACK TO DEFAULT
++          duration_to_hold_avoidance: 4.0 # [s] #REVERT BACK TO DEFAULT
+ 
+         # for opposite directional object
+         oncoming_object:
+diff --git a/autoware_launch/config/planning/scenario_planning/lane_driving/behavior_planning/behavior_path_planner/autoware_behavior_path_static_obstacle_avoidance_module/static_obstacle_avoidance.param.yaml b/autoware_launch/config/planning/scenario_planning/lane_driving/behavior_planning/behavior_path_planner/autoware_behavior_path_static_obstacle_avoidance_module/static_obstacle_avoidance.param.yaml
+index 497c0ee..96bebba 100644
+--- a/autoware_launch/config/planning/scenario_planning/lane_driving/behavior_planning/behavior_path_planner/autoware_behavior_path_static_obstacle_avoidance_module/static_obstacle_avoidance.param.yaml
++++ b/autoware_launch/config/planning/scenario_planning/lane_driving/behavior_planning/behavior_path_planner/autoware_behavior_path_static_obstacle_avoidance_module/static_obstacle_avoidance.param.yaml
+@@ -23,20 +23,20 @@
+           th_moving_time: 2.0                           # [s]
+           longitudinal_margin: 0.0                      # [m]
+           lateral_margin:
+-            soft_margin: 0.3                            # [m]
++            soft_margin: 0.5                          # [m]  #TO GET DESIRED BEHAVIOR: More room when avoiding static obstacles
+             hard_margin: 0.2                            # [m]
+-            hard_margin_for_parked_vehicle: 0.7         # [m]
++            hard_margin_for_parked_vehicle: 0.3         # [m] #TO GET DESIRED BEHAVIOR: More room when avoiding parked vehicles
+           max_expand_ratio: 0.0                         # [-] FOR DEVELOPER
+-          envelope_buffer_margin: 0.5                   # [m] FOR DEVELOPER
++          envelope_buffer_margin: 0.3                   # [m] FOR DEVELOPER
+           th_error_eclipse_long_radius : 0.6            # [m]
+         truck:
+           th_moving_speed: 1.0
+           th_moving_time: 2.0
+           longitudinal_margin: 0.0
+           lateral_margin:
+-            soft_margin: 0.3
++            soft_margin: 1.0  #TO GET DESIRED BEHAVIOR: More room when avoiding truck
+             hard_margin: 0.2
+-            hard_margin_for_parked_vehicle: 0.7
++            hard_margin_for_parked_vehicle: 0.1 #TO GET DESIRED BEHAVIOR: Trucks are huge so a lower margin will allow us to avoid them
+           max_expand_ratio: 0.0
+           envelope_buffer_margin: 0.5
+           th_error_eclipse_long_radius : 0.6
+@@ -45,9 +45,9 @@
+           th_moving_time: 2.0
+           longitudinal_margin: 0.0
+           lateral_margin:
+-            soft_margin: 0.3
++            soft_margin: 1.0  
+             hard_margin: 0.2
+-            hard_margin_for_parked_vehicle: 0.7
++            hard_margin_for_parked_vehicle: 0.1
+           max_expand_ratio: 0.0
+           envelope_buffer_margin: 0.5
+           th_error_eclipse_long_radius : 0.6
+@@ -56,9 +56,9 @@
+           th_moving_time: 2.0
+           longitudinal_margin: 0.0
+           lateral_margin:
+-            soft_margin: 0.3
++            soft_margin: 1.0  
+             hard_margin: 0.2
+-            hard_margin_for_parked_vehicle: 0.7
++            hard_margin_for_parked_vehicle: 0.1
+           max_expand_ratio: 0.0
+           envelope_buffer_margin: 0.5
+           th_error_eclipse_long_radius : 0.6
+@@ -67,18 +67,18 @@
+           th_moving_time: 1.0
+           longitudinal_margin: 0.0
+           lateral_margin:
+-            soft_margin: 0.7
+-            hard_margin: -0.2
+-            hard_margin_for_parked_vehicle: -0.2
++            soft_margin: 1.0  
++            hard_margin: 0.0
++            hard_margin_for_parked_vehicle: 0.0
+           max_expand_ratio: 0.0
+-          envelope_buffer_margin: 0.1
++          envelope_buffer_margin: 0.3
+           th_error_eclipse_long_radius : 0.6
+         bicycle:
+           th_moving_speed: 0.28
+           th_moving_time: 1.0
+           longitudinal_margin: 1.0
+           lateral_margin:
+-            soft_margin: 0.7
++            soft_margin: 1.0  
+             hard_margin: 0.5
+             hard_margin_for_parked_vehicle: 0.5
+           max_expand_ratio: 0.0
+@@ -90,8 +90,8 @@
+           longitudinal_margin: 1.0
+           lateral_margin:
+             soft_margin: 0.7
+-            hard_margin: 0.3
+-            hard_margin_for_parked_vehicle: 0.3
++            hard_margin: 0.2
++            hard_margin_for_parked_vehicle: 0.2
+           max_expand_ratio: 0.0
+           envelope_buffer_margin: 0.5
+           th_error_eclipse_long_radius : 0.6
+@@ -117,15 +117,15 @@
+           truck: true                                   # [-]
+           bus: true                                     # [-]
+           trailer: true                                 # [-]
+-          unknown: true                                 # [-] 
++          unknown: false                                 # [-]#TO GET DESIRED BEHAVIOR: DISABLE AVOIDING UNKNOWN OBJECTS
+           bicycle: true                                 # [-]
+           motorcycle: true                              # [-]
+           pedestrian: true                              # [-]
+         # detection range
+-        object_check_goal_distance: 20.0                # [m]
++        object_check_goal_distance: 5.0                # [m] #TO GET DESIRED BEHAVIOR: DO NOT RETURN TO CENTER LINE IF THE GOAL IS THIS DISTANCE AWAY FROM THE OBJECT
+         object_check_return_pose_distance: 20.0         # [m]
+         # lost object compensation
+-        max_compensation_time: 2.0
++        max_compensation_time: 4.0 ##REVERTED BACK TO DEFAULT 2.0
+ 
+         # detection area generation parameters
+         detection_area:
+@@ -150,7 +150,7 @@
+           # "auto"   : generate candidate path. if RTC is running as AUTO mode, the ego avoids it automatically.
+           # "manual" : generate candidate path and wait operator approval even if RTC is running as AUTO mode.
+           # "ignore" : never avoid it.
+-          policy: "manual"                              # [-]
++          policy: "auto"                              # [-] #TO GET DESIRED BEHAVIOR: AUTO AVOIDANCE
+           condition:
+             th_stopped_time: 3.0                        # [s]
+             th_moving_distance: 1.0                     # [m]
+@@ -220,11 +220,11 @@
+         lateral:
+           th_avoid_execution: 0.09                      # [m] FOR DEVELOPER
+           th_small_shift_length: 0.101                  # [m] FOR DEVELOPER
+-          soft_drivable_bound_margin: 0.3               # [m]
++          soft_drivable_bound_margin: 0.5               # [m] #TO GET DESIRED BEHAVIOR: MORE ROOM WHEN AVOIDING STATIC OBSTACLES
+           hard_drivable_bound_margin: 0.3               # [m]
+           max_right_shift_length: 5.0                   # [m] FOR DEVELOPER
+           max_left_shift_length: 5.0                    # [m] FOR DEVELOPER
+-          max_deviation_from_lane: 0.2                  # [m]
++          max_deviation_from_lane: 0.3                  # [m] #REVERTED BACK TO DEFAULT 0.2
+           # approve the next shift line after reaching this percentage of the current shift line length.
+           # this parameter is added to allow waiting for the return of shift approval until the occlusion behind the avoid target is clear.
+           # this feature can be disabled by setting this parameter to 0.0.
+@@ -280,7 +280,7 @@
+         #                margin to avoid.
+         # "reliable": module output avoidance path with safe (rtc cooperate) state only when the vehicle can avoid
+         #             with expected lateral margin.
+-        lateral_margin: "best_effort"                   # [-]
++        lateral_margin: "reliable"                   # [-] #TO GET DESIRED BEHAVIOR: RELIABLE AVOIDANCE
+         # if true, module doesn't wait deceleration and outputs avoidance path by best effort margin.
+         use_shorten_margin_immediately: true            # [-]
+ 
+@@ -316,7 +316,7 @@
+       #                      so that the path can be within drivable area. This method is able to deal with complex avoidance scenario.
+       #                      However, user can't control avoidance manuever execution.
+       # "both"             : Use both method.
+-      path_generation_method: "shift_line_base"
++      path_generation_method: "both" #TO GET DESIRED BEHAVIOR: 2 IS BETTER THAN 1
+ 
+       shift_line_pipeline:
+         trim:
+@@ -329,9 +329,9 @@
+       debug:
+         enable_other_objects_marker: true
+         enable_other_objects_info: true
+-        enable_detection_area_marker: false
+-        enable_drivable_bound_marker: false
+-        enable_safety_check_marker: false
+-        enable_shift_line_marker: false
++        enable_detection_area_marker: true
++        enable_drivable_bound_marker: true
++        enable_safety_check_marker: true
++        enable_shift_line_marker: true
+         enable_lane_marker: false
+         enable_misc_marker: false
+diff --git a/autoware_launch/config/planning/scenario_planning/lane_driving/behavior_planning/behavior_path_planner/drivable_area_expansion.param.yaml b/autoware_launch/config/planning/scenario_planning/lane_driving/behavior_planning/behavior_path_planner/drivable_area_expansion.param.yaml
+index 2e4984a..7909456 100644
+--- a/autoware_launch/config/planning/scenario_planning/lane_driving/behavior_planning/behavior_path_planner/drivable_area_expansion.param.yaml
++++ b/autoware_launch/config/planning/scenario_planning/lane_driving/behavior_planning/behavior_path_planner/drivable_area_expansion.param.yaml
+@@ -9,7 +9,7 @@
+     dynamic_expansion:
+       enabled: true
+       print_runtime: false
+-      max_expansion_distance: 0.0 # [m] maximum distance by which the drivable area can be expended (0.0 means no limit)
++      max_expansion_distance: 0.4 # [m] maximum distance by which the drivable area can be expended (0.0 means no limit) #TO GET DESIRED BEHAVIOR: TO AVOID STATIC OBSTACLES BY LANE CHANGE
+       min_bound_interval: 1.0  # [m] minimum interval between two consecutive bound points (before expansion)
+       smoothing:
+         curvature_average_window: 3  # window size used for smoothing the curvatures using a moving window average
+@@ -20,7 +20,7 @@
+         extra_front_overhang: 0.5 # [m] extra length to add to the front overhang
+         extra_width: 1.0 # [m] extra length to add to the width
+       dynamic_objects:
+-        avoid: false # if true, the drivable area is not expanded in the predicted path of dynamic objects
++        avoid: true # if true, the drivable area is not expanded in the predicted path of dynamic objects
+         extra_footprint_offset:
+           front: 0.5 # [m] extra length to add to the front of the dynamic object footprint
+           rear: 0.5 # [m] extra length to add to the rear of the dynamic object footprint
+@@ -32,6 +32,6 @@
+         reuse_max_deviation: 0.5 # [m] if the path changes by more than this value, the curvatures are recalculated. Otherwise they are reused.
+       avoid_linestring:
+         types: # linestring types in the lanelet maps that will not be crossed when expanding the drivable area
+-          - road_border
++          # - road_border
+           - curbstone
+         distance: 0.0 # [m] distance to keep between the drivable area and the linestrings to avoid
+diff --git a/autoware_launch/config/planning/scenario_planning/lane_driving/behavior_planning/behavior_path_planner/goal_planner/goal_planner.param.yaml b/autoware_launch/config/planning/scenario_planning/lane_driving/behavior_planning/behavior_path_planner/goal_planner/goal_planner.param.yaml
+index b1b03c2..46d7699 100644
+--- a/autoware_launch/config/planning/scenario_planning/lane_driving/behavior_planning/behavior_path_planner/goal_planner/goal_planner.param.yaml
++++ b/autoware_launch/config/planning/scenario_planning/lane_driving/behavior_planning/behavior_path_planner/goal_planner/goal_planner.param.yaml
+@@ -198,4 +198,4 @@
+ 
+       # debug
+       debug:
+-        print_debug_info: false
++        print_debug_info: true
+diff --git a/autoware_launch/config/planning/scenario_planning/lane_driving/behavior_planning/behavior_path_planner/lane_change/lane_change.param.yaml b/autoware_launch/config/planning/scenario_planning/lane_driving/behavior_planning/behavior_path_planner/lane_change/lane_change.param.yaml
+index 0cea2aa..4510fcc 100644
+--- a/autoware_launch/config/planning/scenario_planning/lane_driving/behavior_planning/behavior_path_planner/lane_change/lane_change.param.yaml
++++ b/autoware_launch/config/planning/scenario_planning/lane_driving/behavior_planning/behavior_path_planner/lane_change/lane_change.param.yaml
+@@ -4,12 +4,12 @@
+       backward_lane_length: 200.0 #[m]
+       prepare_duration: 4.0         # [s]
+ 
+-      backward_length_buffer_for_end_of_lane: 3.0 # [m]
++      backward_length_buffer_for_end_of_lane: 4.0 # [m] #TO GET DESIRED BEHAVIOR: STOP FARTHER AWAY FROM THE END OF THE LANE
+       backward_length_buffer_for_blocking_object: 3.0 # [m]
+ 
+-      lane_changing_lateral_jerk: 0.5              # [m/s3]
++      lane_changing_lateral_jerk: 0.5             # [m/s3]
+ 
+-      minimum_lane_changing_velocity: 2.78        # [m/s]
++      minimum_lane_changing_velocity: 1.0        # [m/s] #TO GET DESIRED BEHAVIOR: ABLE TO LANE CHANGE FROM STOPPED POSITION
+       prediction_time_resolution: 0.5           # [s]
+       longitudinal_acceleration_sampling_num: 5
+       lateral_acceleration_sampling_num: 3
+@@ -28,8 +28,8 @@
+ 
+       skip_process:
+         longitudinal_distance_diff_threshold:
+-          prepare: 1.0
+-          lane_changing: 1.0
++          prepare: 0.5
++          lane_changing: 0.5
+ 
+       # safety check
+       safety_check:
+@@ -37,12 +37,12 @@
+         collision_check_yaw_diff_threshold: 3.1416
+         execution:
+           expected_front_deceleration: -1.0
+-          expected_rear_deceleration: -1.0
+-          rear_vehicle_reaction_time: 2.0
+-          rear_vehicle_safety_time_margin: 1.0
++          expected_rear_deceleration: -0.5 #TO GET DESIRED BEHAVIOR: MORE CONSERVATIVE REACTION TIME
++          rear_vehicle_reaction_time: 5.0 #TO GET DESIRED BEHAVIOR: MORE CONSERVATIVE REACTION TIME
++          rear_vehicle_safety_time_margin: 2.0 #TO GET DESIRED BEHAVIOR: MORE CONSERVATIVE REACTION TIME
+           lateral_distance_max_threshold: 2.0
+-          longitudinal_distance_min_threshold: 3.0 
+-          longitudinal_velocity_delta_time: 0.0
++          longitudinal_distance_min_threshold: 5.0 #TO GET DESIRED BEHAVIOR: MORE CONSERVATIVE REACTION TIME
++          longitudinal_velocity_delta_time: 1.0 #TO GET DESIRED BEHAVIOR: MORE CONSERVATIVE REACTION TIME
+         parked:
+           expected_front_deceleration: -1.0
+           expected_rear_deceleration: -2.0
+@@ -53,12 +53,12 @@
+           longitudinal_velocity_delta_time: 0.0
+         cancel:
+           expected_front_deceleration: -1.0
+-          expected_rear_deceleration: -2.0
+-          rear_vehicle_reaction_time: 1.5
+-          rear_vehicle_safety_time_margin: 0.8
++          expected_rear_deceleration: -1.0
++          rear_vehicle_reaction_time: 2.0
++          rear_vehicle_safety_time_margin: 1.2
+           lateral_distance_max_threshold: 1.0
+-          longitudinal_distance_min_threshold: 2.5
+-          longitudinal_velocity_delta_time: 0.0
++          longitudinal_distance_min_threshold: 2.0
++          longitudinal_velocity_delta_time: 1.0
+         stuck:
+           expected_front_deceleration: -1.0
+           expected_rear_deceleration: -1.0
+@@ -92,13 +92,13 @@
+ 
+       # collision check
+       enable_collision_check_for_prepare_phase:
+-        general_lanes: false
++        general_lanes: true #TO GET DESIRED BEHAVIOR: MORE CONSERVATIVE COLLISION CHECK
+         intersection: true
+         turns: true
+-      stopped_object_velocity_threshold: 1.0 # [m/s]
+-      check_objects_on_current_lanes: false
+-      check_objects_on_other_lanes: false
+-      use_all_predicted_path: false
++      stopped_object_velocity_threshold: 0.5 # [m/s] #TO GET DESIRED BEHAVIOR: CONSIDER AS MOVING IN HEAVY TRAFFIC
++      check_objects_on_current_lanes: true #TO GET DESIRED BEHAVIOR: MORE CONSERVATIVE REACTION TIME
++      check_objects_on_other_lanes: true #TO GET DESIRED BEHAVIOR: MORE CONSERVATIVE REACTION TIME
++      use_all_predicted_path: true #TO GET DESIRED BEHAVIOR: MORE CONSERVATIVE REACTION TIME
+ 
+       # lane change regulations
+       regulation:
+@@ -117,10 +117,10 @@
+         enable_on_lane_changing_phase: true
+         delta_time: 1.0                     # [s]
+         duration: 5.0                       # [s]
+-        max_lateral_jerk: 100.0             # [m/s3]
++        max_lateral_jerk: 3000.0             # [m/s3] #REVERT BACK TO ORIGINAL
+         overhang_tolerance: 0.0             # [m]
+         unsafe_hysteresis_threshold: 5      # [/]
+-        deceleration_sampling_num: 5 # [/]
++        deceleration_sampling_num: 3 # [/] #REVERT BACK TO ORIGINAL
+ 
+       lane_change_finish_judge_buffer: 2.0      # [m]
+       finish_judge_lateral_threshold: 0.1        # [m]
+diff --git a/autoware_launch/config/planning/scenario_planning/lane_driving/behavior_planning/behavior_path_planner/side_shift/side_shift.param.yaml b/autoware_launch/config/planning/scenario_planning/lane_driving/behavior_planning/behavior_path_planner/side_shift/side_shift.param.yaml
+index 62aac0b..a5c8ce5 100644
+--- a/autoware_launch/config/planning/scenario_planning/lane_driving/behavior_planning/behavior_path_planner/side_shift/side_shift.param.yaml
++++ b/autoware_launch/config/planning/scenario_planning/lane_driving/behavior_planning/behavior_path_planner/side_shift/side_shift.param.yaml
+@@ -1,10 +1,10 @@
+ /**:
+   ros__parameters:
+     side_shift:
+-      min_distance_to_start_shifting: 5.0
++      min_distance_to_start_shifting: 1.5 #TO GET DESIRED BEHAVIOR: MORE FLEXIBLE SHIFTING
+       time_to_start_shifting: 1.0
+       shifting_lateral_jerk: 0.2
+-      min_shifting_distance: 5.0
+-      min_shifting_speed: 5.56
++      min_shifting_distance: 1.5 #TO GET DESIRED BEHAVIOR: MORE FLEXIBLE SHIFTING
++      min_shifting_speed: 1.0 #TO GET DESIRED BEHAVIOR: MORE FLEXIBLE SHIFTING
+       shift_request_time_limit: 1.0
+-      publish_debug_marker: false
++      publish_debug_marker: true 
+diff --git a/autoware_launch/config/planning/scenario_planning/lane_driving/behavior_planning/behavior_path_planner/start_planner/start_planner.param.yaml b/autoware_launch/config/planning/scenario_planning/lane_driving/behavior_planning/behavior_path_planner/start_planner/start_planner.param.yaml
+index 10eb748..247078a 100644
+--- a/autoware_launch/config/planning/scenario_planning/lane_driving/behavior_planning/behavior_path_planner/start_planner/start_planner.param.yaml
++++ b/autoware_launch/config/planning/scenario_planning/lane_driving/behavior_planning/behavior_path_planner/start_planner/start_planner.param.yaml
+@@ -125,7 +125,7 @@
+             check_bicycle: true
+             check_motorcycle: true
+             check_pedestrian: true
+-            check_unknown: false
++            check_unknown: true
+           # ObjectLaneConfiguration
+           object_lane_configuration:
+             check_current_lane: true
+@@ -144,7 +144,7 @@
+           # safety check configuration
+           enable_safety_check: true
+           # collision check parameters
+-          publish_debug_marker: false
++          publish_debug_marker: true
+           rss_params:
+             rear_vehicle_reaction_time: 2.0
+             rear_vehicle_safety_time_margin: 1.0
+@@ -175,4 +175,4 @@
+ 
+       # debug
+       debug:
+-        print_debug_info: false
++        print_debug_info: true
+diff --git a/autoware_launch/config/planning/scenario_planning/lane_driving/behavior_planning/behavior_velocity_planner/behavior_velocity_planner.param.yaml b/autoware_launch/config/planning/scenario_planning/lane_driving/behavior_planning/behavior_velocity_planner/behavior_velocity_planner.param.yaml
+index b315069..2f5eaa3 100644
+--- a/autoware_launch/config/planning/scenario_planning/lane_driving/behavior_planning/behavior_velocity_planner/behavior_velocity_planner.param.yaml
++++ b/autoware_launch/config/planning/scenario_planning/lane_driving/behavior_planning/behavior_velocity_planner/behavior_velocity_planner.param.yaml
+@@ -1,11 +1,11 @@
+ /**:
+   ros__parameters:
+     forward_path_length: 1000.0
+-    backward_path_length: 5.0
++    backward_path_length: 500.0 #REVERT BACK TO DEFAULT
+     behavior_output_path_interval: 1.0
+     stop_line_extend_length: 5.0
+-    max_accel: -2.8
++    max_accel: -0.5 #TO GET DESIRED BEHAVIOR: BUGGY ACCEL LIMIT
+     max_jerk: -5.0
+     system_delay: 0.5
+     delay_response_time: 0.5
+-    is_publish_debug_path: false # publish all debug path with lane id in each module
++    is_publish_debug_path: true # publish all debug path with lane id in each module
+diff --git a/autoware_launch/config/planning/scenario_planning/lane_driving/behavior_planning/behavior_velocity_planner/intersection.param.yaml b/autoware_launch/config/planning/scenario_planning/lane_driving/behavior_planning/behavior_velocity_planner/intersection.param.yaml
+index c9ac6aa..8580b81 100644
+--- a/autoware_launch/config/planning/scenario_planning/lane_driving/behavior_planning/behavior_velocity_planner/intersection.param.yaml
++++ b/autoware_launch/config/planning/scenario_planning/lane_driving/behavior_planning/behavior_velocity_planner/intersection.param.yaml
+@@ -16,17 +16,17 @@
+ 
+       stuck_vehicle:
+         target_type:
+-          car: true
+-          bus: true
+-          truck: true
+-          trailer: true
++          car: false #DISABLED INTERSECTING MODULE CAUSES A CRASH, SO TURNED OFF ALL PARAMETERS
++          bus: false
++          truck: false
++          trailer: false
+           motorcycle: false
+           bicycle: false
+           unknown: false
+         turn_direction:
+-          left: true
+-          right: true
+-          straight: true
++          left: false
++          right: false
++          straight: false
+         use_stuck_stopline: true
+         stuck_vehicle_detect_dist: 5.0
+         stuck_vehicle_velocity_threshold: 0.833
+@@ -36,16 +36,16 @@
+ 
+       yield_stuck:
+         target_type:
+-          car: true
+-          bus: true
+-          truck: true
+-          trailer: true
++          car: false
++          bus: false
++          truck: false
++          trailer: false
+           motorcycle: false
+           bicycle: false
+           unknown: false
+         turn_direction:
+-          left: true
+-          right: true
++          left: false
++          right: false
+           straight: false
+         distance_threshold: 5.0
+ 
+@@ -54,12 +54,12 @@
+         collision_detection_hold_time: 0.5
+         min_predicted_path_confidence: 0.05
+         target_type:
+-          car: true
+-          bus: true
+-          truck: true
+-          trailer: true
+-          motorcycle: true
+-          bicycle: true
++          car: false
++          bus: false
++          truck: false
++          trailer: false
++          motorcycle: false
++          bicycle: false
+           unknown: false
+         velocity_profile:
+           use_upstream: true
+diff --git a/autoware_launch/config/planning/scenario_planning/lane_driving/behavior_planning/behavior_velocity_planner/speed_bump.param.yaml b/autoware_launch/config/planning/scenario_planning/lane_driving/behavior_planning/behavior_velocity_planner/speed_bump.param.yaml
+index ef61bdb..bc1dfe1 100644
+--- a/autoware_launch/config/planning/scenario_planning/lane_driving/behavior_planning/behavior_velocity_planner/speed_bump.param.yaml
++++ b/autoware_launch/config/planning/scenario_planning/lane_driving/behavior_planning/behavior_velocity_planner/speed_bump.param.yaml
+@@ -1,8 +1,8 @@
+ /**:
+   ros__parameters:
+     speed_bump:
+-      slow_start_margin: 1.0
+-      slow_end_margin: 1.0
++      slow_start_margin: 2.0 #TO GET DESIRED BEHAVIOR: MORE ROOM WHEN STOPPING AT SPEED BUMP
++      slow_end_margin: 0.5 #TO GET DESIRED BEHAVIOR: ACCEL FASTER AFTER STOPPING AT SPEED BUMP
+       print_debug_info: false
+ 
+       # limits for speed bump height and slow down speed to create a linear equation
+@@ -10,4 +10,4 @@
+         min_height: 0.05 # [m]
+         max_height: 0.30 # [m]
+         min_speed: 1.39  # [m/s] = [5 kph]
+-        max_speed: 2.78  # [m/s] = [10 kph]
++        max_speed: 2.30  # [m/s] = [10 kph] #TO GET DESIRED BEHAVIOR: SLOWER SPEED
+diff --git a/autoware_launch/config/planning/scenario_planning/lane_driving/behavior_planning/behavior_velocity_planner/stop_line.param.yaml b/autoware_launch/config/planning/scenario_planning/lane_driving/behavior_planning/behavior_velocity_planner/stop_line.param.yaml
+index 5fa183d..fc93216 100644
+--- a/autoware_launch/config/planning/scenario_planning/lane_driving/behavior_planning/behavior_velocity_planner/stop_line.param.yaml
++++ b/autoware_launch/config/planning/scenario_planning/lane_driving/behavior_planning/behavior_velocity_planner/stop_line.param.yaml
+@@ -1,7 +1,7 @@
+ /**:
+   ros__parameters:
+     stop_line:
+-      stop_margin: 0.0
++      stop_margin: 2.0 #TO GET DESIRED BEHAVIOR: STOP IN TIME, NO BRAKES
+       stop_duration_sec: 1.0
+       use_initialization_stop_line_state: true
+       hold_stop_margin_distance: 2.0
+diff --git a/autoware_launch/config/planning/scenario_planning/lane_driving/motion_planning/autoware_path_optimizer/path_optimizer.param.yaml b/autoware_launch/config/planning/scenario_planning/lane_driving/motion_planning/autoware_path_optimizer/path_optimizer.param.yaml
+index db89a81..e5d5f32 100644
+--- a/autoware_launch/config/planning/scenario_planning/lane_driving/motion_planning/autoware_path_optimizer/path_optimizer.param.yaml
++++ b/autoware_launch/config/planning/scenario_planning/lane_driving/motion_planning/autoware_path_optimizer/path_optimizer.param.yaml
+@@ -3,12 +3,12 @@
+     option:
+       enable_skip_optimization: false                              # skip elastic band and model predictive trajectory
+       enable_reset_prev_optimization: false                        # If true, optimization has no fix constraint to the previous result.
+-      enable_outside_drivable_area_stop: true                      # stop if the ego's trajectory footprint is outside the drivable area
++      enable_outside_drivable_area_stop: false                     # stop if the ego's trajectory footprint is outside the drivable area #TO GET DESIRED BEHAVIOR: REQUIRED FOR LANE CHANGE BY AVOIDANCE
+       use_footprint_polygon_for_outside_drivable_area_check: false # If false, only the footprint's corner points are considered.
+ 
+       debug:
+         # flag to publish
+-        enable_pub_debug_marker: false           # publish debug marker
++        enable_pub_debug_marker: true         # publish debug marker
+         enable_pub_extra_debug_marker: false    # publish extra debug marker
+ 
+         # flag to show
+diff --git a/autoware_launch/config/planning/scenario_planning/lane_driving/motion_planning/motion_velocity_planner/obstacle_velocity_limiter.param.yaml b/autoware_launch/config/planning/scenario_planning/lane_driving/motion_planning/motion_velocity_planner/obstacle_velocity_limiter.param.yaml
+index c6a0c27..e4c7282 100644
+--- a/autoware_launch/config/planning/scenario_planning/lane_driving/motion_planning/motion_velocity_planner/obstacle_velocity_limiter.param.yaml
++++ b/autoware_launch/config/planning/scenario_planning/lane_driving/motion_planning/motion_velocity_planner/obstacle_velocity_limiter.param.yaml
+@@ -20,7 +20,7 @@
+       nb_points: 5  # number of points representing the curved projections
+ 
+     obstacles:
+-      dynamic_source: static_only # source of dynamic obstacles. Must be 'pointcloud', 'occupancy_grid', or 'static_only'.
++      dynamic_source: pointcloud # source of dynamic obstacles. Must be 'pointcloud', 'occupancy_grid', or 'static_only'. #FROM BEFORE
+       ignore_obstacles_on_path: false # if true, obstacles on the ego paths are ignored
+       ignore_extra_distance: 1.0 # [m] extra lateral distance where obstacles along the path are ignored
+       occupancy_grid_threshold: 60 # occupancy grid values higher than this are considered to be obstacles
+diff --git a/autoware_launch/config/planning/scenario_planning/lane_driving/motion_planning/obstacle_cruise_planner/obstacle_cruise_planner.param.yaml b/autoware_launch/config/planning/scenario_planning/lane_driving/motion_planning/obstacle_cruise_planner/obstacle_cruise_planner.param.yaml
+index 695a3b2..8252db1 100644
+--- a/autoware_launch/config/planning/scenario_planning/lane_driving/motion_planning/obstacle_cruise_planner/obstacle_cruise_planner.param.yaml
++++ b/autoware_launch/config/planning/scenario_planning/lane_driving/motion_planning/obstacle_cruise_planner/obstacle_cruise_planner.param.yaml
+@@ -3,7 +3,7 @@
+     common:
+       planning_algorithm: "pid_base" # currently supported algorithm is "pid_base"
+ 
+-      enable_debug_info: false
++      enable_debug_info: true
+       enable_calculation_time_info: false
+ 
+       enable_slow_down_planning: true
+@@ -12,16 +12,16 @@
+       idling_time: 2.0 # idling time to detect front vehicle starting deceleration [s]
+       min_ego_accel_for_rss: -1.0 # ego's acceleration to calculate RSS distance [m/ss]
+       min_object_accel_for_rss: -1.0 # front obstacle's acceleration to calculate RSS distance [m/ss]
+-      safe_distance_margin : 6.0 # This is also used as a stop margin [m]
+-      terminal_safe_distance_margin : 3.0 # Stop margin at the goal. This value cannot exceed safe distance margin. [m]
+-      hold_stop_velocity_threshold: 0.01 # The maximum ego velocity to hold stopping [m/s]
+-      hold_stop_distance_threshold: 0.3 # The ego keeps stopping if the distance to stop changes within the threshold [m]
+-      slow_down_min_acc: -1.0         # slow down min deceleration [m/ss]
++      safe_distance_margin : 2.0 # This is also used as a stop margin [m]
++      terminal_safe_distance_margin : 1.0 # Stop margin at the goal. This value cannot exceed safe distance margin. [m]
++      hold_stop_velocity_threshold: 0.3 # The maximum ego velocity to hold stopping [m/s]
++      hold_stop_distance_threshold: 0.5 # The ego keeps stopping if the distance to stop changes within the threshold [m]
++      slow_down_min_acc: -0.1         # slow down min deceleration [m/ss]
+       slow_down_min_jerk: -1.0        # slow down min jerk [m/sss]
+ 
+       nearest_dist_deviation_threshold: 3.0 # [m] for finding nearest index
+       nearest_yaw_deviation_threshold: 1.57 # [rad] for finding nearest index
+-      min_behavior_stop_margin: 3.0 # [m]
++      min_behavior_stop_margin: 2.0 # [m]
+       stop_on_curve:
+         enable_approaching: false
+         additional_safe_distance_margin: 3.0 # [m]
+@@ -29,7 +29,7 @@
+       suppress_sudden_obstacle_stop: false
+ 
+       stop_obstacle_type:
+-        unknown: true
++        unknown: false
+         car: true
+         truck: true
+         bus: true
+@@ -41,7 +41,7 @@
+ 
+       cruise_obstacle_type:
+         inside:
+-          unknown: true
++          unknown: false
+           car: true
+           truck: true
+           bus: true
+@@ -61,7 +61,7 @@
+           pedestrian: false
+ 
+       slow_down_obstacle_type:
+-        unknown: false
++        unknown: true
+         car: true
+         truck: true
+         bus: true
+@@ -88,9 +88,9 @@
+       stop_obstacle_hold_time_threshold : 1.0 # maximum time for holding closest stop obstacle
+ 
+       # hysteresis for cruise and stop
+-      obstacle_velocity_threshold_from_cruise_to_stop : 3.0 # stop planning is executed to the obstacle whose velocity is less than this value [m/s]
+-      obstacle_velocity_threshold_from_stop_to_cruise : 3.5 # stop planning is executed to the obstacle whose velocity is less than this value [m/s]
+-
++      obstacle_velocity_threshold_from_cruise_to_stop : 0.5 # stop planning is executed to the obstacle whose velocity is less than this value [m/s]
++      obstacle_velocity_threshold_from_stop_to_cruise : 0.6 # stop planning is executed to the obstacle whose velocity is less than this value [m/s]
++      #(Maximum obstacle velocity for stop)
+       # if crossing vehicle is determined as target obstacles or not
+       crossing_obstacle:
+         obstacle_velocity_threshold : 3.0 # velocity threshold for crossing obstacle for cruise or stop [m/s]
+@@ -103,7 +103,7 @@
+           collision_time_margin : 4.0 # time threshold of collision between obstacle adn ego for cruise or stop [s]
+ 
+       cruise:
+-        max_lat_margin: 1.0 # lateral margin between obstacle and trajectory band with ego's width
++        max_lat_margin: 0.4 # lateral margin between obstacle and trajectory band with ego's width
+         outside_obstacle:
+           obstacle_velocity_threshold : 3.5 # minimum velocity threshold of obstacles outside the trajectory to cruise or stop [m/s]
+           ego_obstacle_overlap_time_threshold : 2.0 #  time threshold to decide cut-in obstacle for cruise or stop [s]
+@@ -115,7 +115,7 @@
+           max_obstacles_collision_time: 10.0 # how far the blocking obstacle
+           stopped_obstacle_velocity_threshold: 0.5
+       slow_down:
+-        max_lat_margin: 1.1  # lateral margin between obstacle and trajectory band with ego's width
++        max_lat_margin: 0.5  # lateral margin between obstacle and trajectory band with ego's width
+         lat_hysteresis_margin: 0.2
+ 
+         successive_num_to_entry_slow_down_condition: 5
+diff --git a/autoware_launch/config/planning/scenario_planning/lane_driving/motion_planning/obstacle_stop_planner/obstacle_stop_planner.param.yaml b/autoware_launch/config/planning/scenario_planning/lane_driving/motion_planning/obstacle_stop_planner/obstacle_stop_planner.param.yaml
+index 8e215a1..5dfb72d 100644
+--- a/autoware_launch/config/planning/scenario_planning/lane_driving/motion_planning/obstacle_stop_planner/obstacle_stop_planner.param.yaml
++++ b/autoware_launch/config/planning/scenario_planning/lane_driving/motion_planning/obstacle_stop_planner/obstacle_stop_planner.param.yaml
+@@ -16,14 +16,14 @@
+     stop_planner:
+       # params for stop position
+       stop_position:
+-        max_longitudinal_margin: 5.0             # stop margin distance from obstacle on the path [m]
++        max_longitudinal_margin: 0.5             # stop margin distance from obstacle on the path [m]
+         max_longitudinal_margin_behind_goal: 2.5 # stop margin distance from obstacle behind goal on the path [m]
+         min_longitudinal_margin: 5.0             # stop margin distance when any other stop point is inserted in stop margin [m]
+-        hold_stop_margin_distance: 0.0           # the ego keeps stopping if the ego is in this margin [m]
++        hold_stop_margin_distance: 2.0           # the ego keeps stopping if the ego is in this margin [m]
+ 
+       # params for detection area
+       detection_area:
+-        lateral_margin: 0.0                  # margin [m]
++        lateral_margin: 0.5                  # margin [m]
+         vehicle_lateral_margin: 0.0          # margin of vehicle footprint [m]
+         pedestrian_lateral_margin: 0.0       # margin of pedestrian footprint [m]
+         unknown_lateral_margin: 0.0          # margin of unknown footprint [m]
+diff --git a/autoware_launch/config/planning/scenario_planning/lane_driving/motion_planning/surround_obstacle_checker/surround_obstacle_checker.param.yaml b/autoware_launch/config/planning/scenario_planning/lane_driving/motion_planning/surround_obstacle_checker/surround_obstacle_checker.param.yaml
+index 7f72420..a7718a6 100644
+--- a/autoware_launch/config/planning/scenario_planning/lane_driving/motion_planning/surround_obstacle_checker/surround_obstacle_checker.param.yaml
++++ b/autoware_launch/config/planning/scenario_planning/lane_driving/motion_planning/surround_obstacle_checker/surround_obstacle_checker.param.yaml
+@@ -11,8 +11,8 @@
+     unknown:
+       enable_check: false
+       surround_check_front_distance: 0.5
+-      surround_check_side_distance: 0.5
+-      surround_check_back_distance: 0.5
++      surround_check_side_distance: 1.0
++      surround_check_back_distance: 1.0
+     car:
+       enable_check: true
+       surround_check_front_distance: 0.5
+@@ -51,7 +51,7 @@
+ 
+     surround_check_hysteresis_distance: 0.1
+ 
+-    state_clear_time: 0.2
++    state_clear_time: 1.0
+ 
+     # ego stop state
+     stop_state_ego_speed: 0.1 #[m/s]
+diff --git a/autoware_launch/config/planning/scenario_planning/parking/freespace_planner/freespace_planner.param.yaml b/autoware_launch/config/planning/scenario_planning/parking/freespace_planner/freespace_planner.param.yaml
+index d82a942..a561b42 100644
+--- a/autoware_launch/config/planning/scenario_planning/parking/freespace_planner/freespace_planner.param.yaml
++++ b/autoware_launch/config/planning/scenario_planning/parking/freespace_planner/freespace_planner.param.yaml
+@@ -2,7 +2,7 @@
+   ros__parameters:
+     # -- Node Configurations --
+     planning_algorithm: "astar"
+-    waypoints_velocity: 5.0
++    waypoints_velocity: 1.0 #TO GET DESIRED BEHAVIOR: SLOWER SPEED WHEN PARKING
+     update_rate: 10.0
+     th_arrived_distance_m: 0.5
+     th_stopped_time_sec: 1.0
+diff --git a/autoware_launch/config/system/component_state_monitor/topics.yaml b/autoware_launch/config/system/component_state_monitor/topics.yaml
+index 3845a96..c88166b 100644
+--- a/autoware_launch/config/system/component_state_monitor/topics.yaml
++++ b/autoware_launch/config/system/component_state_monitor/topics.yaml
+@@ -76,18 +76,18 @@
+     error_rate: 1.0
+     timeout: 1.0
+ 
+-- module: perception
+-  mode: [online, logging_simulation]
+-  type: autonomous
+-  args:
+-    node_name_suffix: traffic_light_recognition_traffic_signals
+-    topic: /perception/traffic_light_recognition/traffic_signals
+-    topic_type: autoware_perception_msgs/msg/TrafficLightGroupArray
+-    best_effort: false
+-    transient_local: false
+-    warn_rate: 5.0
+-    error_rate: 1.0
+-    timeout: 1.0
++# - module: perception
++#   mode: [online, logging_simulation]
++#   type: autonomous
++#   args:
++#     node_name_suffix: traffic_light_recognition_traffic_signals
++#     topic: /perception/traffic_light_recognition/traffic_signals
++#     topic_type: autoware_perception_msgs/msg/TrafficLightGroupArray
++#     best_effort: false
++#     transient_local: false
++#     warn_rate: 5.0
++#     error_rate: 1.0
++#     timeout: 1.0
+ 
+ - module: planning
+   mode: [online, logging_simulation, planning_simulation]
