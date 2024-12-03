@@ -41,7 +41,7 @@
           rear_vehicle_reaction_time: 5.0
           rear_vehicle_safety_time_margin: 2.0
           lateral_distance_max_threshold: 2.0
-          longitudinal_distance_min_threshold: 5.0
+          longitudinal_distance_min_threshold: 3.0
           longitudinal_velocity_delta_time: 1.0
         parked:
           expected_front_deceleration: -1.0
@@ -65,7 +65,7 @@
           rear_vehicle_reaction_time: 2.0
           rear_vehicle_safety_time_margin: 1.0
           lateral_distance_max_threshold: 2.0
-          longitudinal_distance_min_threshold: 3.0
+          longitudinal_distance_min_threshold: 1.0
           longitudinal_velocity_delta_time: 0.0
 
         # lane expansion for object filtering
@@ -108,8 +108,8 @@
 
       # ego vehicle stuck detection
       stuck_detection:
-        velocity: 0.5 # [m/s]
-        stop_time: 3.0 # [s]
+        velocity: 0.2 # [m/s]
+        stop_time: 6.0 # [s]
 
       # lane change cancel
       cancel:
