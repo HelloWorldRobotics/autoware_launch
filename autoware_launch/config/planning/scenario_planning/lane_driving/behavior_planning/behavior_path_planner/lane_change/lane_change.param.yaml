@@ -1,7 +1,7 @@
 /**:
   ros__parameters:
     lane_change:
-      backward_lane_length: 200.0 #[m]
+      backward_lane_length: 100.0 #[m]
       prepare_duration: 4.0         # [s]
 
       backward_length_buffer_for_end_of_lane: 4.0 # [m]
@@ -9,7 +9,7 @@
 
       lane_changing_lateral_jerk: 0.5             # [m/s3]
 
-      minimum_lane_changing_velocity: 1.0        # [m/s]
+      minimum_lane_changing_velocity: 2.0        # [m/s]
       prediction_time_resolution: 0.5           # [s]
       longitudinal_acceleration_sampling_num: 5
       lateral_acceleration_sampling_num: 3
@@ -23,7 +23,7 @@
       length_ratio_for_turn_signal_deactivation: 0.8 # ratio (desired end position)
 
       # longitudinal acceleration
-      min_longitudinal_acc: -1.0
+      min_longitudinal_acc: -0.4
       max_longitudinal_acc: 1.0
 
       skip_process:
@@ -36,12 +36,12 @@
         allow_loose_check_for_cancel: true
         collision_check_yaw_diff_threshold: 3.1416
         execution:
-          expected_front_deceleration: -1.0
+          expected_front_deceleration: -0.5
           expected_rear_deceleration: -0.5  
-          rear_vehicle_reaction_time: 5.0
+          rear_vehicle_reaction_time: 3.0
           rear_vehicle_safety_time_margin: 2.0
           lateral_distance_max_threshold: 2.0
-          longitudinal_distance_min_threshold: 3.0
+          longitudinal_distance_min_threshold: 2.5
           longitudinal_velocity_delta_time: 1.0
         parked:
           expected_front_deceleration: -1.0
@@ -114,7 +114,7 @@
       # lane change cancel
       cancel:
         enable_on_prepare_phase: true
-        enable_on_lane_changing_phase: true
+        enable_on_lane_changing_phase: false
         delta_time: 1.0                     # [s]
         duration: 5.0                       # [s]
         max_lateral_jerk: 100.0             # [m/s3]
