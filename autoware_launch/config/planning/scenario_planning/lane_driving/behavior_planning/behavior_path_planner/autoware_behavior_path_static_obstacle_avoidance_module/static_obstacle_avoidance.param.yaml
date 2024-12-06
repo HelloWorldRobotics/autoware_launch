@@ -24,10 +24,10 @@
           longitudinal_margin: 0.0                      # [m]
           lateral_margin:
             soft_margin: 0.4                          # [m]
-            hard_margin: 0.2                            # [m]
+            hard_margin: 0.3                            # [m]
             hard_margin_for_parked_vehicle: 0.3         # [m]
           max_expand_ratio: 0.0                         # [-] FOR DEVELOPER
-          envelope_buffer_margin: 0.3                   # [m] FOR DEVELOPER
+          envelope_buffer_margin: 0.5                   # [m] FOR DEVELOPER
           th_error_eclipse_long_radius : 0.6            # [m]
         truck:
           th_moving_speed: 1.0
@@ -316,7 +316,7 @@
       #                      so that the path can be within drivable area. This method is able to deal with complex avoidance scenario.
       #                      However, user can't control avoidance manuever execution.
       # "both"             : Use both method.
-      path_generation_method: "both"
+      path_generation_method: "shift_line_base"
 
       shift_line_pipeline:
         trim:
