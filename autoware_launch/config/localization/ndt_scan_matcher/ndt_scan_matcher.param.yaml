@@ -29,10 +29,10 @@
       step_size: 0.1
 
       # The ND voxel grid resolution
-      resolution: 2.5
+      resolution: 4.0
 
       # The number of iterations required to calculate alignment
-      max_iterations: 100 ##CHANGED
+      max_iterations: 75 ##CHANGED
 
       # Number of threads used for parallel computing
       num_threads: 6
