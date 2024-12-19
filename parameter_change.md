@@ -1,7 +1,3 @@
-# autoware_launch
-
-A launch configuration repository for [Autoware](https://github.com/autowarefoundation/autoware), containing node configurations and their parameters.
-
 # Autoware Configuration Changes
 
 This document outlines all behavioral changes made to Autoware configuration files.

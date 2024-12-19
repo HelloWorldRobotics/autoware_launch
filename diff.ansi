@@ -1,6 +1,4 @@
-diff --git a/autoware_launch/config/control/operation_mode_transition_manager/operation_mode_transition_manager.param.yaml b/autoware_launch/config/control/operation_mode_transition_manager/operation_mode_transition_manager.param.yaml
-index a4e8ab2..aff60d6 100644
---- a/autoware_launch/config/control/operation_mode_transition_manager/operation_mode_transition_manager.param.yaml
+
 +++ b/autoware_launch/config/control/operation_mode_transition_manager/operation_mode_transition_manager.param.yaml
 @@ -4,17 +4,17 @@
      frequency_hz: 10.0
