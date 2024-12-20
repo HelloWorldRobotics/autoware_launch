@@ -1,175 +1,271 @@
-# autoware_launch
+# Autoware Buggy Configuration Guide
 
-A launch configuration repository for [Autoware](https://github.com/autowarefoundation/autoware), containing node configurations and their parameters.
+Updated 15th December by @zawlali
 
-# Autoware Configuration Changes
+## Table of Contents
+1. [Installation Guide](#installation-guide)
+   - [Repository Setup](#repository-setup)
+   - [Development Environment](#development-environment)
+   - [Dependencies](#dependencies)
+   - [Build Process](#build-process)
+   - [Buggy Workspace](#buggy-workspace)
+2. [Map Setup](#map-setup)
+   - [MRANTI Map](#mranti-map)
+   - [Foxglove Layouts](#foxglove-layouts)
+3. [Hardware Setup](#hardware-setup)
+   - [USB Device Configuration](#usb-device-configuration)
+   - [LiDAR Configuration](#lidar-configuration)
+4. [System Operation](#system-operation)
+   - [Planning Simulator](#planning-simulator)
+   - [Full System Launch](#full-system-launch)
+5. [Configuration Changes](#configuration-changes)
+   - [Behavioral Modifications](#behavioral-modifications)
+   - [Parameter Tuning](#parameter-tuning)
 
-This document outlines all behavioral changes made to Autoware configuration files.
+## Installation Guide
 
-## Operation Mode Transition Manager
-- 🟢 **Enable engage while driving**: `enable_engage_on_driving: true`
-  - <span style="color:orange">TO GET DESIRED BEHAVIOR: To be able to switch to auto drive when moving [NOT TESTED PROPERLY]</span>
+### Repository Setup
 
-- 🟢 **Speed thresholds modified**:
-  ```yaml
-  speed_upper_threshold: 2.0
-  speed_lower_threshold: -2.0
-  ```
-  - <span style="color:orange">TO GET DESIRED BEHAVIOR: To be able to switch to auto drive when moving [NOT TESTED PROPERLY]</span>
+Clone the September release repository:
+```bash
+git clone -b release/2024.09 https://github.com/HelloWorldRobotics/autoware.buggy.git
+```
 
-## Longitudinal PID Controller
-- 🟢 **Delay compensation**: `delay_compensation_time: 0.25`
-  - <span style="color:orange">TO GET DESIRED BEHAVIOR: Compensate delay in buggy control</span>
+### Development Environment
 
-- 🟢 **Emergency flags**: `enable_overshoot_emergency: false`
-  - <span style="color:orange">TO GET DESIRED BEHAVIOR: Disable unnecessary emergency flags</span>
+Navigate to the repository and run the setup script:
+```bash
+cd ~/autoware.buggy
+./setup-dev-env.sh
+```
 
-- 🟢 **Slope handling**: 
-  ```yaml
-  enable_slope_compensation: false
-  enable_keep_stopped_until_steer_convergence: false
-  ```
-  - <span style="color:orange">TO GET DESIRED BEHAVIOR: Unreliable slope sources currently due to lanelet/PCD [FUTURE: TEST WITH IMU SLOPE]</span>
-  - <span style="color:orange">TO GET DESIRED BEHAVIOR: To switch to auto faster</span>
+If you encounter NVIDIA/CUDA issues, run these commands and try the setup again:
+```bash
+sudo apt purge        \
+  "cuda*"             \
+  "libcudnn*"         \
+  "libnvinfer*"       \
+  "libnvonnxparsers*" \
+  "libnvparsers*"     \
+  "tensorrt*"         \
+  "nvidia*"
 
-- 🟢 **Stop distances increased**:
-  ```yaml
-  drive_state_stop_dist: 2.0
-  stopping_state_stop_dist: 2.0
-  ```
-  - <span style="color:orange">TO GET DESIRED BEHAVIOR: Increased since no brake implemented yet</span>
+sudo apt autoremove
+```
 
-- 🟢 **PID parameters tuned**:
-  ```yaml
-  kp: 0.2
-  ki: 0.001
-  kd: 0.2
-  max_out: 0.2
-  max_p_effort: 0.2
-  min_p_effort: -0.2
-  max_i_effort: 0.05
-  min_i_effort: -0.05
-  max_d_effort: 0.2
-  min_d_effort: -0.2
-  ```
-  - <span style="color:orange">TO GET DESIRED BEHAVIOR: Tested appropriate values</span>
+### Dependencies
 
-- 🟢 **Integration threshold**: `current_vel_threshold_pid_integration: 2.0`
-  - <span style="color:orange">TO GET DESIRED BEHAVIOR: Increased since no brake implemented yet</span>
+1. Import repositories:
+```bash
+mkdir src
+vcs import src < autoware.repos
+```
 
-- 🟢 **Stop acceleration values**:
-  ```yaml
-  smooth_stop_max_strong_acc: -2.5
-  smooth_stop_min_strong_acc: -2.0
-  smooth_stop_weak_acc: -2.0
-  smooth_stop_weak_stop_acc: -2.0
-  ```
-  - <span style="color:orange">TO GET DESIRED BEHAVIOR: Increased since no brake implemented yet</span>
+2. Add colcon ignore files for packages with modified versions in buggy_ws:
+```bash
+touch ~/autoware.buggy/src/universe/autoware.universe/common/tier4_state_rviz_plugin/COLCON_IGNORE
+```
 
-- 🟢 **Maximum acceleration**: `max_acc: 0.5`
-  - <span style="color:orange">TO GET DESIRED BEHAVIOR: Stop in time, no brakes, this is the max accel we can expect</span>
+3. Setup ROS2 dependencies:
+```bash
+echo 'source /opt/ros/humble/setup.bash' >> ~/.bashrc && source ~/.bashrc
+sudo apt update && sudo apt upgrade
+rosdep update
+rosdep install -y --from-paths src --ignore-src --rosdistro $ROS_DISTRO
+```
 
-## Map Based Prediction
-- 🟢 **Unknown object prediction**: `unknown: 1.0`
-  - <span style="color:orange">TO GET DESIRED BEHAVIOR: Increase unknown path prediction accuracy</span>
+### Build Process
 
-## Ground Segmentation
-- 🟢 **Ground segmentation parameters optimized**:
-  ```yaml
-  local_slope_max_angle_deg: 25.0
-  split_points_distance_tolerance: 0.3
-  use_virtual_ground_point: true
-  split_height_distance: 0.05
-  non_ground_height_threshold: 0.15
-  detection_range_z_max: 1.0
-  elevation_grid_mode: false
-  ```
-  - <span style="color:orange">TO GET DESIRED BEHAVIOR: Better ground segmentation, tested</span>
+For a lighter but slower build, use:
+```bash
+MAKEFLAGS="-j1" colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release --executor sequential --packages-skip-build-finished --continue-on-error
+```
 
-## Default Preset
-- 🟢 **Dynamic obstacle avoidance**: `launch_dynamic_obstacle_avoidance: "true"`
-  - <span style="color:orange">TO GET DESIRED BEHAVIOR: Activate disabled detection module</span>
+> **Note**: You can adjust the build parameters:
+> - `MAKEFLAGS="-j1"`: Change the number for parallel processes
+> - `--executor sequential`: Change to `--parallel-workers <num>` for faster builds
+> - If experiencing crashes, consider reducing parallel processes
 
-- 🟢 **Speed bump module**: `launch_speed_bump_module: "true"`
-  - <span style="color:orange">TO GET DESIRED BEHAVIOR: Slow down for speedbump</span>
+### Buggy Workspace Setup
 
-## Velocity Smoother
-- 🟢 **Lateral acceleration parameters**:
-  ```yaml
-  max_lateral_accel: 0.65
-  min_curve_velocity: 0.8
-  decel_distance_before_curve: 5.5
-  ```
-  - <span style="color:orange">TO GET DESIRED BEHAVIOR: Appropriate cornering speeds tested</span>
+1. Clone the buggy workspace repository:
+```bash
+cd
+git clone -b base_driver_split_test https://github.com/HelloWorldRobotics/buggy_ws.git
+```
 
-- 🟢 **Engage velocity**: `engage_velocity: 0.5`
-  - <span style="color:orange">TO GET DESIRED BEHAVIOR: Appropriate engage velocity to start</span>
+2. Import dependencies and build:
+```bash
+cd buggy_ws
+vcs import src < buggy.repos
+rosdep install -y --from-paths src --ignore-src --rosdistro $ROS_DISTRO
+colcon build --symlink-install
+```
 
-- 🟢 **Stopping parameters**:
-  ```yaml
-  stopping_velocity: 0.5
-  stopping_distance: 2.0
-  ```
-  - <span style="color:orange">TO GET DESIRED BEHAVIOR: Slow down for stopping</span>
-  - <span style="color:orange">TO GET DESIRED BEHAVIOR: Slow down earlier for stopping</span>
+3. Setup CycloneDDS:
+```bash
+cd ~/buggy_ws/scripts
+sudo chmod +x setup-cyclone.sh
+./setup-cyclone.sh
+```
 
-## Common Planning Parameters
-- 🟢 **Acceleration and jerk limits**:
-  ```yaml
-  min_acc: -0.4
-  min_jerk: -0.25
-  ```
-  - <span style="color:orange">TO GET DESIRED BEHAVIOR: No brake deceleration</span>
-  - <span style="color:orange">TO GET DESIRED BEHAVIOR: No brake jerk deceleration</span>
+4. Remove interfering programs:
+```bash
+sudo apt purge brltty -y
+sudo systemctl stop ModemManager
+sudo systemctl disable ModemManager
+```
 
-## Planning Validator
-- 🟢 **Invalid trajectory handling**: `invalid_trajectory_handling_type: 2`
-  - <span style="color:orange">TO GET DESIRED BEHAVIOR: Attempt to continue on invalid trajectory [NOT TESTED]</span>
+## Map Setup
 
-- 🟢 **Trajectory margin**: `forward_trajectory_length_margin: 3.0`
-  - <span style="color:orange">TO GET DESIRED BEHAVIOR: Longer trajectory to avoid stopping</span>
+### MRANTI Map
 
-## Dynamic Obstacle Avoidance
-- 🟢 **Obstacle velocity threshold**: `min_obstacle_vel: 1.0`
-  - <span style="color:orange">TO GET DESIRED BEHAVIOR: Dont consider stopped objects</span>
+1. Create and navigate to map directory:
+```bash
+mkdir ~/autoware_map
+cd ~/autoware_map
+```
 
-- 🟢 **Lateral offset**: `lat_offset_from_obstacle: 0.3`
-  - <span style="color:orange">TO GET DESIRED BEHAVIOR: Cars are crazy here so if its not small we will be avoiding all the time</span>
+2. Clone map repository and download pointcloud:
+```bash
+git clone -b big_map https://github.com/HelloWorldRobotics/mranti_lanelet
+cd mranti_lanelet
+wget -O pointcloud_map.pcd https://mclpfg.by.files.1drv.com/y4mIgi-DRT6UWYWphVCZ86OnfBGGD_ZsJ2tf6P_eqOflCyf20O61QQ_7nLyxCYw3RJnXHqQo0LNlCSLiCg6lgJAk0WlQPDdvb449qc0pQjA_1aF-BriFtpEGqeFJ1cZ-fFd3n-Txhk4uyd4zUtPLDxxsziqpJXkGCdkxdBKJ9C3b7kTLaXcIZDporF7Tsu1EmKOhG1n0p_HuSkbaUC4YPT7h3giNCGcF3Lkr7-OZqOLBgA?AVOverride=1
+```
 
-- 🟢 **Pedestrian margin**: `margin_distance_around_pedestrian: 0.6`
-  - <span style="color:orange">TO GET DESIRED BEHAVIOR: Changed when tuning before GPU install with all unknown object params</span>
+### Foxglove Layouts
 
-## Static Obstacle Avoidance
-- 🟢 **Lateral margins**:
-  ```yaml
-  soft_margin: 0.5
-  hard_margin_for_parked_vehicle: 0.3
-  ```
-  - <span style="color:orange">TO GET DESIRED BEHAVIOR: More room when avoiding static obstacles</span>
-  - <span style="color:orange">TO GET DESIRED BEHAVIOR: More room when avoiding parked vehicles</span>
+Clone the layouts repository:
+```bash
+cd ~
+git clone https://github.com/HelloWorldRobotics/foxglove_layouts.git
+```
 
-## Speed Bump Parameters
-- 🟢 **Speed bump approach**: 
-  ```yaml
-  slow_start_margin: 2.0
-  slow_end_margin: 0.5
-  max_speed: 2.30
-  ```
-  - <span style="color:orange">TO GET DESIRED BEHAVIOR: More room when stopping at speed bump</span>
-  - <span style="color:orange">TO GET DESIRED BEHAVIOR: Accel faster after stopping at speed bump</span>
-  - <span style="color:orange">TO GET DESIRED BEHAVIOR: Slower speed</span>
+## Hardware Setup
 
-## Stop Line Parameters
-- 🟢 **Stop margin**: `stop_margin: 2.0`
-  - <span style="color:orange">TO GET DESIRED BEHAVIOR: Stop in time, no brakes</span>
+### USB Device Configuration
 
-## Path Optimizer
-- 🟢 **Drivable area check**: `enable_outside_drivable_area_stop: false`
-  - <span style="color:orange">TO GET DESIRED BEHAVIOR: Required for lane change by avoidance</span>
+1. Monitor USB devices by running these commands in separate terminals:
+```bash
+watch -n 0.3 'ls -l /dev/ttyUSB*'
+watch -n 0.3 'ls -l /dev/ttyACM*'
+```
 
-## Freespace Planner
-- 🟢 **Parking velocity**: `waypoints_velocity: 1.0`
-  - <span style="color:orange">TO GET DESIRED BEHAVIOR: Slower speed when parking</span>
+2. Connect devices one at a time in this order:
+   - PLC
+   - Encoder
+   - Steering
+   - IMU
 
----
-**Note**: Parameters marked with 🟢 have been tested and verified. Some changes are temporary solutions until hardware improvements are implemented.
+3. For each connected device, check its attributes:
+```bash
+udevadm -a -n /dev/ttyACM1 | grep -Ei "devpath|kernel|idvendor|idproduct|serial"
+```
+
+4. Create udev rules:
+```bash
+sudo nano /etc/udev/rules.d/10-buggy.rules
+```
+
+Example rules:
+```
+KERNEL=="ttyUSB*", ATTRS{idProduct}=="ea60", ATTRS{idVendor}=="10c4", MODE="0777", ATTRS{serial}=="0001", SYMLINK+="buggy_imu"
+KERNEL=="ttyUSB*", ATTRS{idProduct}=="6001", ATTRS{idVendor}=="0403", MODE="0777", ATTRS{serial}=="B001AYFZ", SYMLINK+="buggy_base_wheel"
+KERNEL=="ttyUSB*", ATTRS{idProduct}=="6001", ATTRS{idVendor}=="0403", MODE="0777", ATTRS{serial}=="B001BB26", SYMLINK+="buggy_base_encoder"
+KERNEL=="ttyACM*", KERNELS=="1-7.4.1:1.6", MODE="0777", SYMLINK+="buggy_base_steering"
+```
+
+> **Important**: Avoid using devpath or USB port paths when possible, as this binds the rule to specific USB ports. The device should be recognized on any port connected, though this may not be possible for all devices.
+
+5. Apply and reload udev rules:
+```bash
+sudo udevadm control --reload-rules && sudo udevadm trigger
+```
+
+6. Verify rules are applied:
+```bash
+ls -l /dev/bugg*
+```
+This should show all four devices defined in the rules.
+
+### LiDAR Configuration
+
+1. Monitor network interfaces:
+```bash
+watch -n 0.3 'ip a'
+```
+
+2. Connect LiDARs one by one, noting the MAC address of each ethernet port (e.g., link/ether 6c:a1:00:06:25:9a)
+
+3. Add LiDAR udev rules to the existing rules file:
+```bash
+sudo nano /etc/udev/rules.d/10-buggy.rules
+```
+
+Example LiDAR rules:
+```
+SUBSYSTEM=="net", ACTION=="add", ATTRS{address}=="78:d0:04:33:ec:38", KERNEL=="enp0s31f6", NAME="lidar_top"
+SUBSYSTEM=="net", ACTION=="add", ATTRS{address}=="78:d0:04:34:45:c1", KERNEL=="enp2s0", NAME="lidar_right"
+SUBSYSTEM=="net", ACTION=="add", ATTRS{address}=="78:d0:04:34:45:c2", KERNEL=="enp3s0", NAME="lidar_left"
+```
+
+4. Configure netplan:
+```bash
+sudo nano /etc/netplan/01-network-manager-all.yaml
+sudo netplan apply
+```
+
+5. Test LiDAR communication:
+```bash
+sudo tcpdump -n -i lidar_top
+```
+
+6. Test LiDAR drivers:
+```bash
+source ~/autoware.buggy/install/setup.bash
+source ~/buggy_ws/install/setup.bash
+ros2 launch autoware_launch lidars_only.launch.xml
+```
+
+7. In a new terminal, launch Foxglove bridge:
+```bash
+ros2 launch foxglove_bridge foxglove_bridge_launch.xml
+```
+
+Then visualize the pointcloud topics in Foxglove to verify.
+
+## System Operation
+
+### Source Workspaces
+```bash
+source ~/autoware.buggy/install/setup.bash
+source ~/buggy_ws/install/setup.bash
+```
+
+### Planning Simulator
+Launch the planning simulator:
+```bash
+ros2 launch autoware_launch planning_simulator.launch.xml map_path:=[YOUR_MAP_FOLDER_HERE] vehicle_model:=buggy_vehicle sensor_model:=buggy_sensor_kit
+```
+
+### Full System Launch
+
+1. Launch Autoware nodes (Terminal 1):
+```bash
+source ~/autoware.buggy/install/setup.bash
+source ~/buggy_ws/install/setup.bash
+ros2 launch autoware_launch autoware.launch.xml map_path:=$HOME/autoware_map/mranti_lanelet
+```
+
+2. Launch drivers and utilities (Terminal 2):
+```bash
+source ~/autoware.buggy/install/setup.bash
+source ~/buggy_ws/install/setup.bash
+ros2 launch buggy_bringup buggy_bringup.launch.xml buggy_no:=1
+```
+
+> **Tip**: To make launching faster, explore the scripts in `~/buggy_ws/scripts` and consider adding them to your bash aliases.
+
+
+
+
