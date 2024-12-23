@@ -1,7 +1,5 @@
 # Autoware Buggy Configuration Guide
 
-Updated 15th December by @zawlali
-
 ## Table of Contents
 1. [Installation Guide](#installation-guide)
    - [Repository Setup](#repository-setup)
@@ -265,6 +263,22 @@ ros2 launch buggy_bringup buggy_bringup.launch.xml buggy_no:=1
 ```
 
 > **Tip**: To make launching faster, explore the scripts in `~/buggy_ws/scripts` and consider adding them to your bash aliases.
+
+## Configuration Changes
+
+### Behavioral Modifications
+- Vehicle-specific parameters and sensor transformations are stored in `autoware_individual_params`
+- Sensor transformations include:
+  - Multiple cameras (camera0, camera1, camera2, traffic light cameras)
+  - LiDAR sensors (velodyne_top, velodyne_left, velodyne_right)
+  - GNSS
+  - IMU
+
+### Parameter Tuning
+Parameters that were changed are stated in the following README.md file: [Parameter Tuning README](parameter_change.md)
+
+> **Note**: Always test parameter changes in simulation before deploying to the real vehicle.
+
 
 
 

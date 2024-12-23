@@ -3,6 +3,15 @@
 This document outlines all behavioral changes made to Autoware configuration files.
 
 ## Operation Mode Transition Manager
+```
+📂 src/launch/
+└── 📂 autoware_launch/
+    └── 📂 autoware_launch/
+        └── 📂 config/
+            └── 📂 control/
+                └── 📂 operation_mode_transition_manager/
+                    └── 📄 operation_mode_transition_manager.param.yaml
+```
 - 🟢 **Enable engage while driving**: `enable_engage_on_driving: true`
   - <span style="color:orange">TO GET DESIRED BEHAVIOR: To be able to switch to auto drive when moving [NOT TESTED PROPERLY]</span>
 
@@ -14,6 +23,16 @@ This document outlines all behavioral changes made to Autoware configuration fil
   - <span style="color:orange">TO GET DESIRED BEHAVIOR: To be able to switch to auto drive when moving [NOT TESTED PROPERLY]</span>
 
 ## Longitudinal PID Controller
+```
+📂 src/launch/
+└── 📂 autoware_launch/
+    └── 📂 autoware_launch/
+        └── 📂 config/
+            └── 📂 control/
+                └── 📂 trajectory_follower/
+                    └── 📂 longitudinal/
+                        └── 📄 pid.param.yaml
+```
 - 🟢 **Delay compensation**: `delay_compensation_time: 0.25`
   - <span style="color:orange">TO GET DESIRED BEHAVIOR: Compensate delay in buggy control</span>
 
@@ -65,11 +84,31 @@ This document outlines all behavioral changes made to Autoware configuration fil
 - 🟢 **Maximum acceleration**: `max_acc: 0.5`
   - <span style="color:orange">TO GET DESIRED BEHAVIOR: Stop in time, no brakes, this is the max accel we can expect</span>
 
-## Map Based Prediction (autoware_launch/config/perception/object_recognition/prediction/map_based_prediction.param.yaml b/autoware_launch/config/perception/object_recognition/prediction/map_based_prediction.param.yaml)
+## Map Based Prediction
+```
+📂 src/launch/
+└── 📂 autoware_launch/
+    └── 📂 autoware_launch/
+        └── 📂 config/
+            └── 📂 perception/
+                └── 📂 object_recognition/
+                    └── 📂 prediction/
+                        └── 📄 map_based_prediction.param.yaml
+```
 - 🟢 **Unknown object prediction**: `unknown: 1.0`
   - <span style="color:orange">TO GET DESIRED BEHAVIOR: Increase unknown path prediction accuracy</span>
 
-## Ground Segmentation (autoware_launch/config/perception/obstacle_segmentation/ground_segmentation/ground_segmentation.param.yaml)
+## Ground Segmentation
+```
+📂 src/launch/
+└── 📂 autoware_launch/
+    └── 📂 autoware_launch/
+        └── 📂 config/
+            └── 📂 perception/
+                └── 📂 obstacle_segmentation/
+                    └── 📂 ground_segmentation/
+                        └── 📄 ground_segmentation.param.yaml
+```
 - 🟢 **Ground segmentation parameters optimized**:
   ```yaml
   local_slope_max_angle_deg: 25.0
@@ -82,14 +121,34 @@ This document outlines all behavioral changes made to Autoware configuration fil
   ```
   - <span style="color:orange">TO GET DESIRED BEHAVIOR: Better ground segmentation, tested</span>
 
-## Default Preset (/autoware_launch/config/planning/preset/default_preset.yaml)
+## Default Preset
+```
+📂 src/launch/
+└── 📂 autoware_launch/
+    └── 📂 autoware_launch/
+        └── 📂 config/
+            └── 📂 planning/
+                └── 📂 preset/
+                    └── 📄 default_preset.yaml
+```
 - 🟢 **Dynamic obstacle avoidance**: `launch_dynamic_obstacle_avoidance: "true"`
   - <span style="color:orange">TO GET DESIRED BEHAVIOR: Activate disabled detection module</span>
 
 - 🟢 **Speed bump module**: `launch_speed_bump_module: "true"`
   - <span style="color:orange">TO GET DESIRED BEHAVIOR: Slow down for speedbump</span>
 
-## Velocity Smoother (/autoware_launch/config/planning/scenario_planning/common/autoware_velocity_smoother/velocity_smoother.param.yaml b/autoware_launch/config/planning/scenario_planning/common/autoware_velocity_smoother/velocity_smoother.param.yaml)
+## Velocity Smoother
+```
+📂 src/launch/
+└── 📂 autoware_launch/
+    └── 📂 autoware_launch/
+        └── 📂 config/
+            └── 📂 planning/
+                └── 📂 scenario_planning/
+                    └── 📂 common/
+                        └── 📂 autoware_velocity_smoother/
+                            └── 📄 velocity_smoother.param.yaml
+```
 - 🟢 **Lateral acceleration parameters**:
   ```yaml
   max_lateral_accel: 0.65
@@ -109,7 +168,17 @@ This document outlines all behavioral changes made to Autoware configuration fil
   - <span style="color:orange">TO GET DESIRED BEHAVIOR: Slow down for stopping</span>
   - <span style="color:orange">TO GET DESIRED BEHAVIOR: Slow down earlier for stopping</span>
 
-## Common Planning Parameters (/autoware_launch/config/planning/scenario_planning/common/common.param.yaml)
+## Common Planning Parameters
+```
+📂 src/launch/
+└── 📂 autoware_launch/
+    └── 📂 autoware_launch/
+        └── 📂 config/
+            └── 📂 planning/
+                └── 📂 scenario_planning/
+                    └── 📂 common/
+                        └── 📄 common.param.yaml
+```
 - 🟢 **Acceleration and jerk limits**:
   ```yaml
   min_acc: -0.4
@@ -118,14 +187,38 @@ This document outlines all behavioral changes made to Autoware configuration fil
   - <span style="color:orange">TO GET DESIRED BEHAVIOR: No brake deceleration</span>
   - <span style="color:orange">TO GET DESIRED BEHAVIOR: No brake jerk deceleration</span>
 
-## Planning Validator (/autoware_launch/config/planning/scenario_planning/common/planning_validator/planning_validator.param.yaml)
+## Planning Validator
+```
+📂 src/launch/
+└── 📂 autoware_launch/
+    └── 📂 autoware_launch/
+        └── 📂 config/
+            └── 📂 planning/
+                └── 📂 scenario_planning/
+                    └── 📂 common/
+                        └── 📂 planning_validator/
+                            └── 📄 planning_validator.param.yaml
+```
 - 🟢 **Invalid trajectory handling**: `invalid_trajectory_handling_type: 2`
   - <span style="color:orange">TO GET DESIRED BEHAVIOR: Attempt to continue on invalid trajectory [NOT TESTED]</span>
 
 - 🟢 **Trajectory margin**: `forward_trajectory_length_margin: 3.0`
   - <span style="color:orange">TO GET DESIRED BEHAVIOR: Longer trajectory to avoid stopping</span>
 
-## Dynamic Obstacle Avoidance (/autoware_launch/config/planning/scenario_planning/lane_driving/behavior_planning/behavior_path_planner/autoware_behavior_path_dynamic_obstacle_avoidance_module/dynamic_obstacle_avoidance.param.yaml)
+## Dynamic Obstacle Avoidance
+```
+📂 src/launch/
+└── 📂 autoware_launch/
+    └── 📂 autoware_launch/
+        └── 📂 config/
+            └── 📂 planning/
+                └── 📂 scenario_planning/
+                    └── 📂 lane_driving/
+                        └── 📂 behavior_planning/
+                            └── 📂 behavior_path_planner/
+                                └── 📂 autoware_behavior_path_dynamic_obstacle_avoidance_module/
+                                    └── 📄 dynamic_obstacle_avoidance.param.yaml
+```
 - 🟢 **Obstacle velocity threshold**: `min_obstacle_vel: 1.0`
   - <span style="color:orange">TO GET DESIRED BEHAVIOR: Dont consider stopped objects</span>
 
@@ -135,8 +228,20 @@ This document outlines all behavioral changes made to Autoware configuration fil
 - 🟢 **Pedestrian margin**: `margin_distance_around_pedestrian: 0.6`
   - <span style="color:orange">TO GET DESIRED BEHAVIOR: Changed when tuning before GPU install with all unknown object params</span>
 
-## Static Obstacle Avoidance (/autoware_launch/config/planning/scenario_planning/lane_driving/behavior_planning/behavior_path_planner/autoware_behavior_path_static_obstacle_avoidance_module/static_obstacle_avoidance.param.yaml
-)
+## Static Obstacle Avoidance
+```
+📂 src/launch/
+└── 📂 autoware_launch/
+    └── 📂 autoware_launch/
+        └── 📂 config/
+            └── 📂 planning/
+                └── 📂 scenario_planning/
+                    └── 📂 lane_driving/
+                        └── 📂 behavior_planning/
+                            └── 📂 behavior_path_planner/
+                                └── 📂 autoware_behavior_path_static_obstacle_avoidance_module/
+                                    └── 📄 static_obstacle_avoidance.param.yaml
+```
 - 🟢 **Lateral margins**:
   ```yaml
   soft_margin: 0.5
@@ -145,8 +250,19 @@ This document outlines all behavioral changes made to Autoware configuration fil
   - <span style="color:orange">TO GET DESIRED BEHAVIOR: More room when avoiding static obstacles</span>
   - <span style="color:orange">TO GET DESIRED BEHAVIOR: More room when avoiding parked vehicles</span>
 
-## Speed Bump Parameters (/autoware_launch/config/planning/scenario_planning/lane_driving/behavior_planning/behavior_velocity_planner/speed_bump.param.yaml
-)
+## Speed Bump Parameters
+```
+📂 src/launch/
+└── 📂 autoware_launch/
+    └── 📂 autoware_launch/
+        └── 📂 config/
+            └── 📂 planning/
+                └── 📂 scenario_planning/
+                    └── 📂 lane_driving/
+                        └── 📂 behavior_planning/
+                            └── 📂 behavior_velocity_planner/
+                                └── 📄 speed_bump.param.yaml
+```
 - 🟢 **Speed bump approach**: 
   ```yaml
   slow_start_margin: 2.0
@@ -157,18 +273,50 @@ This document outlines all behavioral changes made to Autoware configuration fil
   - <span style="color:orange">TO GET DESIRED BEHAVIOR: Accel faster after stopping at speed bump</span>
   - <span style="color:orange">TO GET DESIRED BEHAVIOR: Slower speed</span>
 
-## Stop Line Parameters (/autoware_launch/config/planning/scenario_planning/lane_driving/behavior_planning/behavior_velocity_planner/stop_line.param.yaml
-)
+## Stop Line Parameters
+```
+📂 src/launch/
+└── 📂 autoware_launch/
+    └── 📂 autoware_launch/
+        └── 📂 config/
+            └── 📂 planning/
+                └── 📂 scenario_planning/
+                    └── 📂 lane_driving/
+                        └── 📂 behavior_planning/
+                            └── 📂 behavior_velocity_planner/
+                                └── 📄 stop_line.param.yaml
+```
 - 🟢 **Stop margin**: `stop_margin: 2.0`
   - <span style="color:orange">TO GET DESIRED BEHAVIOR: Stop in time, no brakes</span>
 
-## Path Optimizer (/autoware_launch/config/planning/scenario_planning/lane_driving/motion_planning/autoware_path_optimizer/path_optimizer.param.yaml
-)
+## Path Optimizer
+```
+📂 src/launch/
+└── 📂 autoware_launch/
+    └── 📂 autoware_launch/
+        └── 📂 config/
+            └── 📂 planning/
+                └── 📂 scenario_planning/
+                    └── 📂 lane_driving/
+                        └── 📂 motion_planning/
+                            └── 📂 autoware_path_optimizer/
+                                └── 📄 path_optimizer.param.yaml
+```
 - 🟢 **Drivable area check**: `enable_outside_drivable_area_stop: false`
   - <span style="color:orange">TO GET DESIRED BEHAVIOR: Required for lane change by avoidance</span>
 
-## Freespace Planner (/autoware_launch/config/planning/scenario_planning/parking/freespace_planner/freespace_planner.param.yaml
-)
+## Freespace Planner
+```
+📂 src/launch/
+└── 📂 autoware_launch/
+    └── 📂 autoware_launch/
+        └── 📂 config/
+            └── 📂 planning/
+                └── 📂 scenario_planning/
+                    └── 📂 parking/
+                        └── 📂 freespace_planner/
+                            └── 📄 freespace_planner.param.yaml
+```
 - 🟢 **Parking velocity**: `waypoints_velocity: 1.0`
   - <span style="color:orange">TO GET DESIRED BEHAVIOR: Slower speed when parking</span>
 
